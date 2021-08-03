@@ -2,6 +2,7 @@ package io.spruce.prefab;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
+import io.spruce.pipeline.event.LogEvent;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,9 +38,9 @@ public class StdLogger extends Logger {
     public void removeOutStream(OutputStream stream) { this.outStreams.remove(stream); }
 
     @Override
-    protected void write(String str) {
+    protected void write(LogEvent event) {
         // create final string and convert to UTF-8 bytes
-        String s = str + "\n";
+        String s = event.text().toString() + "\n";
         byte[] d = s.getBytes(StandardCharsets.UTF_8);
 
         // TODO: add event pipelines per output stream

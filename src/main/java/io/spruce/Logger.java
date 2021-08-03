@@ -39,7 +39,7 @@ public abstract class Logger {
      * Writes a message.
      * @param str The message.
      */
-    protected abstract void write(String str);
+    protected abstract void write(LogEvent data);
 
     /**
      * Formats a string into something that
@@ -69,8 +69,7 @@ public abstract class Logger {
         if (!accepted) return;
 
         // retrieve and write message
-        String msg = event.text().toString();
-        this.write(msg);
+        this.write(event);
     }
 
     public void info   (String s) { this.log(s, LogLevel.INFO); }
