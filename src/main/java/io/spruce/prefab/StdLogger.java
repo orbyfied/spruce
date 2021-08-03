@@ -13,11 +13,11 @@ public class StdLogger extends Logger {
 
     @Override
     protected void write(String str) {
-
+        System.out.println(str);
     }
 
     @Override
     protected String formatPrimary(String text, LogLevel level, Object... extra) {
-        return null;
+        return "[" + level.getTag().toUpperCase() + "] " + text;
     }
 }

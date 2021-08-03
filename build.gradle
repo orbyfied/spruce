@@ -5,8 +5,8 @@ plugins {
 group 'io.orbyfied.spruce'
 version '1.0-a1'
 
-sourceCompatibility = 16
-targetCompatibility = 16
+sourceCompatibility = 13
+targetCompatibility = 13
 
 dependencies {
 
