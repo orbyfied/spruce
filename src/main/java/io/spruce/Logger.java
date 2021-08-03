@@ -1,6 +1,6 @@
 package io.spruce;
 
-import io.spruce.pipeline.LogEvent;
+import io.spruce.pipeline.event.LogEvent;
 import io.spruce.pipeline.LoggerPipeline;
 import io.spruce.arg.LogLevel;
 
@@ -13,25 +13,25 @@ public abstract class Logger {
     /**
      * A pipeline of handlers. Used to process events.
      */
-    private LoggerPipeline pipeline;
+    private LoggerPipeline<LogEvent> pipeline;
 
     /** Basic constructor. */
     public Logger(String tag) {
         this.tag      = tag;
-        this.pipeline = new LoggerPipeline(this);
+        this.pipeline = new LoggerPipeline<>(this);
     }
 
     /**
      * Gets the logger's pipeline.
      * @return The LoggerPipeline.
      */
-    public LoggerPipeline pipeline() { return pipeline; }
+    public LoggerPipeline<LogEvent> pipeline() { return pipeline; }
 
     /**
      * Sets the pipeline.
      * @param pipeline The pipeline.
      */
-    public void pipeline(LoggerPipeline pipeline) { this.pipeline = pipeline.cloneFor(this); }
+    public void pipeline(LoggerPipeline<LogEvent> pipeline) { this.pipeline = pipeline.cloneFor(this); }
 
     ////////////////////////////////////////////////////////
 

@@ -2,6 +2,7 @@ package io.spruce;
 
 import io.spruce.arg.LoggerTag;
 import io.spruce.pipeline.LogHandler;
+import io.spruce.pipeline.event.LogEvent;
 import io.spruce.prefab.StdLoggerFactory;
 
 import java.util.ArrayList;
@@ -9,8 +10,7 @@ import java.util.List;
 
 public abstract class LoggerFactory<T extends Logger> {
 
-    private static final StdLoggerFactory pStdLoggerFactory = new StdLoggerFactory();
-    public  static       StdLoggerFactory stdFactory() { return pStdLoggerFactory; }
+    public  static       StdLoggerFactory stdFactory() { return StdLoggerFactory.pInstance; }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +28,7 @@ public abstract class LoggerFactory<T extends Logger> {
      * @param handlerList The list of handlers, meant for the pipeline.
      * @param other Other parameters.
      */
-    protected abstract void apply0(T logger, List<LogHandler> handlerList, List<Object> other);
+    protected abstract void apply0(T logger, List<LogHandler<LogEvent>> handlerList, List<Object> other);
 
     /**
      * Creates a new logger of type T.
@@ -36,19 +36,15 @@ public abstract class LoggerFactory<T extends Logger> {
      * @return The new logger.
      */
     public T make(Object... args) {
-        // collect arguments
-        String tag                = null;
-        List<LogHandler> handlers = new ArrayList<>();
-        List<Object>     other    = new ArrayList<>();
+        // iterate, process and collect arguments
+        String                     tag      = null;
+        List<LogHandler<LogEvent>> handlers = new ArrayList<>();
+        List<Object>               other    = new ArrayList<>();
 
-        int l = args.length;
-        for (int i = 0; i < l; i++) {
-            // get arg
-            Object arg = args[i];
-
+        for (Object arg : args) {
             // process arg
-            if      (arg instanceof LoggerTag)  tag = ((LoggerTag) arg).s;
-            else if (arg instanceof LogHandler) handlers.add((LogHandler) arg);
+            if (arg instanceof LoggerTag) tag = ((LoggerTag) arg).s;
+            else if (arg instanceof LogHandler) handlers.add((LogHandler<LogEvent>) arg);
 
             else other.add(arg);
         }

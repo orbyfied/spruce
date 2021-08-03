@@ -1,15 +1,15 @@
-package io.spruce.pipeline;
+package io.spruce.pipeline.event;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
+import io.spruce.pipeline.Event;
 
-public class LogEvent {
+public class LogEvent extends Event {
     Logger   logger;
     String   raw;
     LogLevel level;
 
     StringBuilder finalTextBuilder;
-    boolean       cancelled;
 
     public LogEvent(Logger logger, String raw, LogLevel level, String currentFinalText) {
         this.logger = logger;
@@ -17,7 +17,6 @@ public class LogEvent {
         this.level  = level;
 
         this.finalTextBuilder = new StringBuilder(currentFinalText);
-        this.cancelled        = false;
     }
 
     /*                */
@@ -27,16 +26,6 @@ public class LogEvent {
     public Logger   getLogger() { return logger; }
     public LogLevel getLevel()  { return level; }
     public String   getRaw()    { return raw; }
-
-    /** Checks if the event has been set cancelled earlier. */
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    /** Sets if the event should be cancelled. */
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
-    }
 
     /**
      * Returns the StringBuilder for the final used/printed text.
