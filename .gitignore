@@ -14,8 +14,8 @@
 hs_err_pid*
 
 # Gradle build folder
-build/
+/build/
 
 # Gradle stuff
-.gradle/
-gradle/wrapper/*.jar
+/.gradle/
+/gradle/wrapper/*.jar
