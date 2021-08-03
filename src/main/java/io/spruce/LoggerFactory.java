@@ -2,11 +2,17 @@ package io.spruce;
 
 import io.spruce.arg.LoggerTag;
 import io.spruce.pipeline.LogHandler;
+import io.spruce.prefab.StdLoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class LoggerFactory<T extends Logger> {
+
+    private static final StdLoggerFactory pStdLoggerFactory = new StdLoggerFactory();
+    public  static       StdLoggerFactory stdFactory() { return pStdLoggerFactory; }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Creates a new instance of T.
@@ -23,9 +29,6 @@ public abstract class LoggerFactory<T extends Logger> {
      * @param other Other parameters.
      */
     protected abstract void apply0(T logger, List<LogHandler> handlerList, List<Object> other);
-
-    /** UTIL: Quick class check. */
-    private boolean uIs(Object o, String cls) { return o.getClass().getSimpleName().equals(cls); }
 
     /**
      * Creates a new logger of type T.
@@ -61,4 +64,8 @@ public abstract class LoggerFactory<T extends Logger> {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /** UTIL: Quick class check. */
+    private boolean uIs(Object o, String cls) { return o.getClass().getSimpleName().equals(cls); }
+
 }
