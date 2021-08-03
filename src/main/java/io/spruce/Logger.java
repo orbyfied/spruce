@@ -8,12 +8,12 @@ public abstract class Logger {
     /**
      * A tag/ID that the logger can be recognized by.
      */
-    private String tag;
+    protected String tag;
 
     /**
      * A pipeline of handlers. Used to process events.
      */
-    private LoggerPipeline<LogEvent> pipeline;
+    protected LoggerPipeline<LogEvent> pipeline;
 
     /** Basic constructor. */
     public Logger(String tag) {
