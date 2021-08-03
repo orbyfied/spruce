@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+}
+
+group 'io.orbyfied.spruce'
+version '1.0-a1'
+
+dependencies {
+
+}
