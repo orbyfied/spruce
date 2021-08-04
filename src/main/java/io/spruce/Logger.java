@@ -8,6 +8,12 @@ public abstract class Logger {
     /**
      * A tag/ID that the logger can be recognized by.
      */
+    protected String id;
+
+    /**
+     * A string that can be used as a sort of
+     * display name for this logger.
+     */
     protected String tag;
 
     /**
@@ -16,8 +22,8 @@ public abstract class Logger {
     protected LoggerPipeline<LogEvent> pipeline;
 
     /** Basic constructor. */
-    public Logger(String tag) {
-        this.tag      = tag;
+    public Logger(String id) {
+        this.id       = id;
         this.pipeline = new LoggerPipeline<>(this);
     }
 
@@ -37,7 +43,7 @@ public abstract class Logger {
 
     /**
      * Writes a message.
-     * @param str The message.
+     * @param data The information.
      */
     protected abstract void write(LogEvent data);
 
@@ -78,5 +84,7 @@ public abstract class Logger {
 
     /* Basic getters and setters. */
 
-    public String getTag() { return tag; }
+    public String getId()          { return id; }
+    public String getTag()         { return tag; }
+    public void setTag(String tag) { this.tag = tag; }
 }

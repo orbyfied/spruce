@@ -13,17 +13,18 @@ import java.util.List;
 public class StdLogger extends Logger {
 
     private List<OutputStream> outStreams;
+    private boolean            shouldPrintTag = true;
 
     /*
      * Basic constructors.
      */
 
-    public StdLogger(String tag) {
-        this(tag, new ArrayList<>());
+    public StdLogger(String id) {
+        this(id, new ArrayList<>());
     }
 
-    public StdLogger(String tag, List<OutputStream> streams) {
-        super(tag);
+    public StdLogger(String id, List<OutputStream> streams) {
+        super(id);
         this.outStreams = streams;
         outStreams.add(System.out); // add system.out as a default output stream
     }
@@ -54,6 +55,6 @@ public class StdLogger extends Logger {
 
     @Override
     protected String formatPrimary(String text, LogLevel level, Object... extra) {
-        return "[" + level.getTag().toUpperCase() + "] " + text;
+        return (shouldPrintTag ? "[" + tag + "]" : "") + "[" + level.getTag().toUpperCase() + "] " + text;
     }
 }
