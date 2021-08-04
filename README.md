@@ -3,7 +3,7 @@ An advanced Java logging framework, with custom loggers, multiple output streams
 useful utilities for colors and console output and more.
 
 > README will be updated with useful information once the project gets close to being stable.
-> **Under development, code may be incomplete or even uncompilable.**
+> **This project is under development, the code may be incomplete or even uncompilable.**
 
 ## How to import **`spruce`**
 
