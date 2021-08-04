@@ -9,7 +9,7 @@ import io.spruce.pipeline.event.LogEvent;
 import java.io.OutputStream;
 import java.util.List;
 
-public class StdLoggerFactory extends LoggerFactory<StdLogger> {
+public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
 
     /* ID stuff. */
     private static int nid = 0;
@@ -18,19 +18,19 @@ public class StdLoggerFactory extends LoggerFactory<StdLogger> {
     }
 
     /** Public instance of this factory. */
-    public static final StdLoggerFactory pInstance = new StdLoggerFactory();
+    public static final StandardLoggerFactory pInstance = new StandardLoggerFactory();
 
     @Override
-    protected StdLogger new0(String id) {
+    protected StandardLogger new0(String id) {
         // generate id if null
         if (id == null) id = Integer.toString(nextId());
 
         // create a new logger object
-        return new StdLogger(id);
+        return new StandardLogger(id);
     }
 
     @Override
-    protected void apply0(StdLogger logger, List<LogHandler<LogEvent>> handlerList, String tag, List<Object> other) {
+    protected void apply0(StandardLogger logger, List<LogHandler<LogEvent>> handlerList, String tag, List<Object> other) {
         // process basic parameters
         logger.pipeline(new LoggerPipeline<>(handlerList));
         logger.setTag(tag);

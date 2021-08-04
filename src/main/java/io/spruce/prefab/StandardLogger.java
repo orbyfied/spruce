@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StdLogger extends Logger {
+public class StandardLogger extends Logger {
 
     private List<OutputStream> outStreams;
     private boolean            shouldPrintTag = true;
@@ -19,11 +19,11 @@ public class StdLogger extends Logger {
      * Basic constructors.
      */
 
-    public StdLogger(String id) {
+    public StandardLogger(String id) {
         this(id, new ArrayList<>());
     }
 
-    public StdLogger(String id, List<OutputStream> streams) {
+    public StandardLogger(String id, List<OutputStream> streams) {
         super(id);
         this.outStreams = streams;
         outStreams.add(System.out); // add system.out as a default output stream
@@ -55,6 +55,6 @@ public class StdLogger extends Logger {
 
     @Override
     protected String formatPrimary(String text, LogLevel level, Object... extra) {
-        return (shouldPrintTag ? "[" + tag + "]" : "") + "[" + level.getTag().toUpperCase() + "] " + text;
+        return (shouldPrintTag && tag != null ? "[" + tag + "]" : "") + "[" + level.getTag().toUpperCase() + "] " + text;
     }
 }
