@@ -21,4 +21,8 @@ hs_err_pid*
 /gradle/wrapper/*.jar
 
 # Test results
+<<<<<<< HEAD
 /.test/
+=======
+/.test/
+>>>>>>> 099d8f80de172a917607c32078bcccc2b40e9912
