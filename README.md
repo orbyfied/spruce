@@ -7,8 +7,8 @@ useful utilities for colors and console output and more.
 
 ## How to import **`spruce`**
 
-In order to use spruce in your prject, you will first have to download or build a JAR.
-Once you have the JAR, relocate it to a folder that is easliy accessible from your project 
+In order to use spruce in your project, you will first have to download or build a JAR.
+Once you have the JAR, relocate it to a folder that is easliy accessible from your project.
 For example, in the projects root directory;
 ```
 project 
@@ -35,14 +35,14 @@ Spruce has a many notable features, but I will only show the following in this s
 
 ### Basic Logging (With pipeline)
 
-Lets write a simple program that logs stuff to both the console, and a file 
+Lets write a simple program that logs stuff to both the console and a file 
 This is actually relatively simple to do using `spruce`:
 
 ```java
 public class Test {
    public static void main(String[] args) throws IOException {
       // create a new file reference
-      // for simplicity, this code assumes that the file alreday exists
+      // for simplicity, this code assumes that the file already exists
       File logFile = new File("log_" + new Date());
 
       // create a new standard logger
