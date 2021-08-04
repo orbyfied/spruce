@@ -19,3 +19,6 @@ hs_err_pid*
 # Gradle stuff
 /.gradle/
 /gradle/wrapper/*.jar
+
+# Test results
+/.test/
