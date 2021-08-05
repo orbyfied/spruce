@@ -44,7 +44,7 @@ public class StandardLogger extends Logger {
     @Override
     protected void write(LogEvent event) {
         // create final string and convert to UTF-8 bytes
-        String s  = event.text().toString() + "\n";
+        String s  = event.text().toString() + ChatColor.RESET + "\n";
         String s1 = Ansi.strip(s);
         byte[] d  = s.getBytes(StandardCharsets.UTF_8);
         byte[] d1 = s1.getBytes(StandardCharsets.UTF_8);

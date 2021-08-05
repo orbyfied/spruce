@@ -11,16 +11,16 @@ import java.util.regex.Pattern;
 public class Ansi {
 
     /** The escape character which denotes the ANSI code. */
-    public static final char   ESC_CHAR  = 27;
+    public static final char ESC_CHAR = 27;
 
     /** The separator between ANSI attributes. */
     public static final String SEPARATOR = ";";
 
     /** Every ANSI attribute/sequence starts like this. */
-    public static final String PREFIX    = ESC_CHAR + "[";
+    public static final String PREFIX = ESC_CHAR + "[";
 
     /** Every ANSI attribute/sequence ends like this. */
-    public static final String SUFFIX    = "m";
+    public static final String SUFFIX = "m";
 
     /**
      * Encodes an array of attributes into a valid ANSI sequence.
@@ -65,6 +65,10 @@ public class Ansi {
         return null;
     }
 
+    /** https://stackoverflow.com/a/14693789/14837740 */
+    private static final String  strip_regex = "\\x1B(?:[@-Z\\-_]|\\[[0-?]*[ -/]*[@-~])";
+    private static final Pattern strip_patrn = Pattern.compile(strip_regex);
+
     /**
      * Strips the string 's' of all of its
      * ANSI sequences.
@@ -73,7 +77,7 @@ public class Ansi {
      */
     public static String strip(String s) {
         // create matcher
-        Matcher matcher = Pattern.compile(Pattern.quote(PREFIX) + ".*" + Pattern.quote(SUFFIX)).matcher(s);
+        Matcher matcher = strip_patrn.matcher(s);
 
         // replace all
         return matcher.replaceAll("");

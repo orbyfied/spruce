@@ -2,6 +2,8 @@ package io.spruce.test;
 
 import io.spruce.LoggerFactory;
 import io.spruce.standard.StandardLogger;
+import io.spruce.util.color.Ansi;
+import io.spruce.util.color.attributes.ChatColor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,7 +20,7 @@ public class BasicLoggerTest {
 
             // add event handler to pipeline
             logger.pipeline().addLast(event -> {
-                event.text().append(" [" + new Date().toString() + "]");
+                event.text().append(ChatColor.YELLOW_FG + " [" + new Date().toString() + "]");
             });
 
             // log something

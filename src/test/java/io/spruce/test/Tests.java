@@ -8,7 +8,8 @@ public class Tests {
 
     static {
         try {
-            testDir.mkdir();
+            if (!testDir.exists())
+                testDir.mkdir();
         } catch (Exception e) { e.printStackTrace(); }
     }
 
@@ -18,9 +19,11 @@ public class Tests {
 
         try {
             if (!parent.exists())
-                parent.mkdirs();
+                if (!parent.mkdirs())
+                    throw new IllegalStateException();
             if (!file.exists())
-                file.createNewFile();
+                if (!file.createNewFile())
+                    throw new IllegalStateException();
         } catch (IOException e) { e.printStackTrace(); }
 
         return file;
