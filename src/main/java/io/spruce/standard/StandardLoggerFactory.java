@@ -1,4 +1,4 @@
-package io.spruce.prefab;
+package io.spruce.standard;
 
 import io.spruce.LoggerFactory;
 import io.spruce.arg.RemoveOutStream;

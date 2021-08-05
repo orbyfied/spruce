@@ -1,5 +1,6 @@
 package io.spruce.util.color;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,8 +46,6 @@ public class Ansi {
 
         // remove trailing separator and append suffix
         builder.delete(builder.length() - SEPARATOR.length() - 1, builder.length()).append(SUFFIX);
-
-        /* DEBUG. */ System.out.println(builder);
 
         // return
         return builder.toString();

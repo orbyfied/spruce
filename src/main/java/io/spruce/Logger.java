@@ -27,6 +27,12 @@ public abstract class Logger {
         this.pipeline = new LoggerPipeline<>(this);
     }
 
+    /** Even more basic constructor. */
+    public Logger() {
+        this.id       = "";
+        this.pipeline = new LoggerPipeline<>(this);
+    }
+
     /**
      * Gets the logger's pipeline.
      * @return The LoggerPipeline.

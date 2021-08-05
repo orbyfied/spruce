@@ -1,4 +1,4 @@
-package io.spruce.prefab;
+package io.spruce.standard;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;

@@ -2,7 +2,7 @@ package io.spruce;
 
 import io.spruce.pipeline.LogHandler;
 import io.spruce.pipeline.event.LogEvent;
-import io.spruce.prefab.StandardLoggerFactory;
+import io.spruce.standard.StandardLoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;

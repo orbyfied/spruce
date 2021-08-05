@@ -55,10 +55,20 @@ public class ChatColor extends ColorAttr implements Cloneable {
         this.space = space;
     }
 
+    public ChatColor(int r, int g, int b) {
+        super(r, g, b);
+        this.space = Space.FOREGROUND;
+    }
+
     public ChatColor(Color color, Space space) {
         super(color);
         this.space = space;
     }
+    public ChatColor(Color color) {
+        super(color);
+        this.space = Space.FOREGROUND;
+    }
+
 
     /**
      * Generates the sequence prefix.
@@ -150,6 +160,6 @@ public class ChatColor extends ColorAttr implements Cloneable {
                 public static final ChatColor OVERLINED = new ChatColor(53);
 
 
-    public static final ChatColor RED = new ChatColor(31);
-        public static final ChatColor RED_BG = RED.bg();
+    public static final ChatColor RED_FG = new ChatColor(31);
+    public static final ChatColor RED_BG = RED_FG.bg();
 }

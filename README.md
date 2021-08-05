@@ -31,7 +31,7 @@ For other build tools/platforms, like Maven, just search it on Google.
 Spruce has a many notable features, but I will only show the following in this section:
   * Basic logging (with pipeline)
   * Custom loggers
-  * Coloured text
+  * Coloured (and formatted) text
 
 ### Basic Logging (With pipeline)
 
@@ -75,5 +75,88 @@ public class Test {
    }
 }
 ```
+
+### Custom Loggers
+
+With `spruce` it is really easy to modify existent loggers or create your own from scratch.
+If you want to modify an existent logger (like, for example, the `StandardLogger`), you will need to extend it and override
+some methods. It is also recommended to create a `LoggerFactory` for your logger, but I won't get into that right now. 
+If you want to make your own logger from scratch you will need to extend the abstract class `Logger`.
+
+**Lets see both things in code form.**
+
+```java
+// main class
+public class Main {
+    public static void main(String[] args) {
+        // construct loggers
+        MyLogger1 l1 = new MyLogger1("1");
+        MyLogger2 l2 = new MyLogger2("2");
+
+        // test
+        l1.info("hello");
+        l2.info("hello");
+
+        // EXPECTED:
+
+        /*
+        [INFO] hello [HELLO]
+        [Info] hello                 <--- THIS SHOULD BE IN RED
+         */
+    }
+}
+
+// method 1: override existent logger
+class MyLogger1 extends StandardLogger { // StandardLogger is the 'prefab' logger class shipped with spruce
+    public MyLogger1(String id) {
+        super(id); // requires super constructor
+    }
+
+    @Override
+    public void write(LogEvent event) {
+        // write " [HELLO]" to the end of the final text
+        event.text().append(" [HELLO]");
+
+        // call StandardLogger's write method to keep its functionality
+        super.write(event);
+    }
+}
+
+// method 2: logger from scratch
+class MyLogger2 extends Logger {
+    public MyLogger2(String id) {
+        super(id); // requires super constructor
+    }
+
+    // as Logger is abstract, we need to implement some methods to make this work
+    // we need to implement the following 2 methods;
+    //   'void write(LogEvent)' - this is supposed to write whatever information the LogEvent
+    //                       passed to any OutputStream.
+    //   'String formatPrimary(String, LogLevel, Object...)' - this is supposed to format
+    //                                                         the raw text with the corresponding properties
+    //                                                         before it is sent to the LogEvent and pipeline.
+
+    @Override
+    protected void write(LogEvent event) {
+        // we will just print the text to the console, but colored in red
+        System.out.println(ChatColor.RED_FG + event.text().toString());
+    }
+
+    @Override
+    protected String formatPrimary(String text, LogLevel lvl, Object... args) {
+        // for this example we will just return the logging level with the text
+        return "[" + lvl.getTag() + "] " + text;
+    }
+}
+```
+
+### Coloured (and formatted) Text
+
+The next one is really simple, and we already saw a bit of it
+in the previous example, but `spruce` allows you to simply color
+text using ANSI. It allows for formatting, 4-bit color (16), 8-bit color (256)
+and even 24-bit color (full RGB).
+
+**This feature is not stable yet, so no example is currently available.**
 
 

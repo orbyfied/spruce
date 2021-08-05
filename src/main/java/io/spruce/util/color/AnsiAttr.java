@@ -1,5 +1,6 @@
 package io.spruce.util.color;
 
+import io.spruce.internal.ArrayUtils;
 import io.spruce.util.color.attributes.ChatColor;
 
 /**
@@ -23,7 +24,8 @@ public abstract class AnsiAttr {
      * @return The concatenated string.
      */
     public String concat(AnsiAttr... colors) {
-        return this + Ansi.encode(colors);
+        return Ansi.encode(ArrayUtils.merge(
+                new AnsiAttr[] { this }, colors));
     }
 
     /**
