@@ -159,7 +159,21 @@ public class ChatColor extends ColorAttr implements Cloneable {
                 public static final ChatColor ENCIRCLED = new ChatColor(52);
                 public static final ChatColor OVERLINED = new ChatColor(53);
 
-
+    public static final ChatColor WHITE_FG = new ChatColor(30);
+    public static final ChatColor WHITE_BG = WHITE_FG.bg();
     public static final ChatColor RED_FG = new ChatColor(31);
     public static final ChatColor RED_BG = RED_FG.bg();
+    public static final ChatColor LIME_FG = new ChatColor(32);
+    public static final ChatColor LIME_BG = LIME_FG.bg();
+    public static final ChatColor YELLOW_FG = new ChatColor(33);
+    public static final ChatColor YELLOW_BG = YELLOW_FG.bg();
+    public static final ChatColor BLUE_FG = new ChatColor(34);
+    public static final ChatColor BLUE_BG = BLUE_FG.bg();
+    public static final ChatColor PINK_FG = new ChatColor(35);
+    public static final ChatColor PINK_BG = PINK_FG.bg();
+    public static final ChatColor AQUA_FG = new ChatColor(36);
+    public static final ChatColor AQUA_BG = AQUA_FG.bg();
+    public static final ChatColor DARK_GRAY_FG = new ChatColor(37);
+    public static final ChatColor DARK_GRAY_BG = DARK_GRAY_FG.bg();
+
 }

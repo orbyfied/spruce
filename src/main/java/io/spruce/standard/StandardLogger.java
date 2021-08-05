@@ -3,9 +3,12 @@ package io.spruce.standard;
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
 import io.spruce.pipeline.event.LogEvent;
+import io.spruce.util.color.Ansi;
+import io.spruce.util.color.attributes.ChatColor;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,20 +44,49 @@ public class StandardLogger extends Logger {
     @Override
     protected void write(LogEvent event) {
         // create final string and convert to UTF-8 bytes
-        String s = event.text().toString() + "\n";
-        byte[] d = s.getBytes(StandardCharsets.UTF_8);
+        String s  = event.text().toString() + "\n";
+        String s1 = Ansi.strip(s);
+        byte[] d  = s.getBytes(StandardCharsets.UTF_8);
+        byte[] d1 = s1.getBytes(StandardCharsets.UTF_8);
 
         // TODO: add event pipelines per output stream
         // write to all output streams
         for (OutputStream stream : outStreams) {
             try {
-                stream.write(d);
+                if (!(stream instanceof PrintStream))
+                     stream.write(d1);
+                else stream.write(d);
             } catch (IOException e) { e.printStackTrace(); }
         }
     }
 
     @Override
     protected String formatPrimary(String text, LogLevel level, Object... extra) {
-        return (shouldPrintTag && tag != null ? "[" + tag + "]" : "") + "[" + level.getTag().toUpperCase() + "] " + text;
+        // create string builder options
+        StringBuilder builder = new StringBuilder();
+
+        // append tag (if needed)
+        if (shouldPrintTag && tag != null) builder.append("(").append(ChatColor.BOLD).append(tag)
+                .append(ChatColor.RESET).append(")").append(" ");
+
+        // append log level
+        builder.append(ChatColor.BOLD + "[");
+
+        switch (level) {
+            case SEVERE:
+                builder.append(ChatColor.RED_FG + "SEVERE");
+                break;
+
+            default:
+                builder.append(new ChatColor(160, 160, 160) + level.getTag().toUpperCase());
+        }
+
+        builder.append(ChatColor.RESET).append(ChatColor.BOLD + "] ").append(ChatColor.RESET);
+
+        // append text
+        builder.append(text);
+
+        // return
+        return builder.toString();
     }
 }

@@ -20,12 +20,14 @@ public abstract class AnsiAttr {
     /**
      * Concatenates this color/formatting code with
      * the others specified.
-     * @param colors The ANSI codes.
+     * @param attrs The ANSI codes.
      * @return The concatenated string.
      */
-    public String concat(AnsiAttr... colors) {
-        return Ansi.encode(ArrayUtils.merge(
-                new AnsiAttr[] { this }, colors));
+    public String concat(AnsiAttr... attrs) {
+        StringBuilder builder = new StringBuilder(this.toString());
+        for (AnsiAttr attr : attrs)
+            builder.append(attr);
+        return builder.toString();
     }
 
     /**

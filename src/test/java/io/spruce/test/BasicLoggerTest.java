@@ -22,7 +22,7 @@ public class BasicLoggerTest {
             });
 
             // log something
-            logger.info("hello");
+            logger.severe("hello");
         } catch (Exception e) {
             e.printStackTrace();
         }
