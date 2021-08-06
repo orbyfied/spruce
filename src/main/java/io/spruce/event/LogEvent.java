@@ -4,12 +4,16 @@ import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
 import io.spruce.pipeline.Event;
 
+import java.util.logging.Formatter;
+
 public class LogEvent extends Event {
     Logger   logger;
     String   raw;
     LogLevel level;
 
+    StringBuilder prefixBuilder;
     StringBuilder finalTextBuilder;
+    StringBuilder suffixBuilder;
 
     public LogEvent(Logger logger, String raw, LogLevel level, String currentFinalText) {
         this.logger = logger;
@@ -17,6 +21,8 @@ public class LogEvent extends Event {
         this.level  = level;
 
         this.finalTextBuilder = new StringBuilder(currentFinalText);
+        this.prefixBuilder    = new StringBuilder();
+        this.suffixBuilder    = new StringBuilder();
     }
 
     /*                */
@@ -32,4 +38,16 @@ public class LogEvent extends Event {
      * @return The StringBuilder object.
      */
     public StringBuilder text() { return finalTextBuilder; }
+
+    /**
+     * Returns the StringBuilder for the final used/printed prefix.
+     * @return The StringBuilder object.
+     */
+    public StringBuilder prefix() { return prefixBuilder; }
+
+    /**
+     * Returns the StringBuilder for the final used/printed suffix.
+     * @return The StringBuilder object.
+     */
+    public StringBuilder suffix() { return suffixBuilder; }
 }
