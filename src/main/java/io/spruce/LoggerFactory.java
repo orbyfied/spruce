@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class LoggerFactory<T extends Logger> {
 
-    public  static StandardLoggerFactory stdFactory() { return StandardLoggerFactory.pInstance; }
+    public  static StandardLoggerFactory standard() { return StandardLoggerFactory.pInstance; }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@ package io.spruce.test;
 
 import io.spruce.LoggerFactory;
 import io.spruce.standard.StandardLogger;
-import io.spruce.util.color.Ansi;
 import io.spruce.util.color.attributes.ChatColor;
 
 import java.io.File;
@@ -16,7 +15,7 @@ public class BasicLoggerTest {
     public static void main(String[] args) {
         try {
             // create logger
-            StandardLogger logger = LoggerFactory.stdFactory().make("id:sus", new FileOutputStream(testFile));
+            StandardLogger logger = LoggerFactory.standard().make("id:sus", new FileOutputStream(testFile));
 
             // add event handler to pipeline
             logger.pipeline().addLast(event -> {
