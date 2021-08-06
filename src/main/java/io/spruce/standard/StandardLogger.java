@@ -2,7 +2,7 @@ package io.spruce.standard;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
-import io.spruce.pipeline.event.LogEvent;
+import io.spruce.event.LogEvent;
 import io.spruce.util.color.Ansi;
 import io.spruce.util.color.attributes.ChatColor;
 

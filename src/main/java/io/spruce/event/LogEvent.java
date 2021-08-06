@@ -1,4 +1,4 @@
-package io.spruce.pipeline.event;
+package io.spruce.event;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;

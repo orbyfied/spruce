@@ -65,7 +65,7 @@ public class Ansi {
         return null;
     }
 
-    /** https://stackoverflow.com/a/14693789/14837740 */
+    /** https://stackoverflow.com/a/14693789/148377040 */
     private static final String  strip_regex = "\\x1B(?:[@-Z\\-_]|\\[[0-?]*[ -/]*[@-~])";
     private static final Pattern strip_patrn = Pattern.compile(strip_regex);
 

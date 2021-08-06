@@ -1,7 +1,7 @@
 package io.spruce;
 
-import io.spruce.pipeline.LogHandler;
-import io.spruce.pipeline.event.LogEvent;
+import io.spruce.pipeline.Handler;
+import io.spruce.event.LogEvent;
 import io.spruce.standard.StandardLoggerFactory;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public abstract class LoggerFactory<T extends Logger> {
      * @param handlerList The list of handlers, meant for the pipeline.
      * @param other Other parameters.
      */
-    protected abstract void apply0(T logger, List<LogHandler<LogEvent>> handlerList, String tag, List<Object> other);
+    protected abstract void apply0(T logger, List<Handler<LogEvent>> handlerList, String tag, List<Object> other);
 
     /**
      * Creates a new logger of type T.
@@ -38,7 +38,7 @@ public abstract class LoggerFactory<T extends Logger> {
         // iterate, process and collect arguments
         String                     id       = null;
         String                     tag      = null;
-        List<LogHandler<LogEvent>> handlers = new ArrayList<>();
+        List<Handler<LogEvent>> handlers = new ArrayList<>();
         List<Object>               other    = new ArrayList<>();
 
         for (Object arg : args) {
@@ -47,7 +47,7 @@ public abstract class LoggerFactory<T extends Logger> {
                 String s = (String) arg;
                 if      (s.startsWith("id:"))  id = s.substring(3);
                 else if (s.startsWith("tag:")) tag = s.substring(4);
-            } else if (arg instanceof LogHandler) handlers.add((LogHandler<LogEvent>) arg);
+            } else if (arg instanceof Handler) handlers.add((Handler<LogEvent>) arg);
 
             else other.add(arg);
         }
