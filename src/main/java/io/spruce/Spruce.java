@@ -1,0 +1,146 @@
+package io.spruce;
+
+import io.spruce.pipeline.Pipeline;
+import io.spruce.standard.StandardLogger;
+
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+/**
+ * Spruce v1.0 (by orbyfied)
+ * @author  orbyfied
+ * @version 1.0
+ * ---------------------------------------
+ * Spruce library initializer and interface.
+ */
+public class Spruce {
+
+    private static final StandardLogger logger = LoggerFactory.standard().make("tag:Spruce", "id:spruce-system");
+
+    /**
+     * The Spruce data namespace.
+     */
+    public static final String NAMESPACE = "io.orbyfied.spruce";
+
+    /**
+     * The path to all Spruce data (like natives).
+     */
+    private static String DATA_PATH;
+    public static String getDataPath() { return DATA_PATH; }
+
+    /**
+     * The path to all natives.
+     */
+    private static String NATIVES_PATH;
+    public static String getNativesPath() { return NATIVES_PATH; }
+
+    /**
+     * The version of Spruce;
+     */
+    public static final String VERSION = "1.0";
+
+    // init
+    protected static final Initializer _initializer = new Initializer(){};
+
+    /**
+     * Initializes Spruce.
+     */
+    protected static void initialize() {
+        // get os name
+        String os = System.getProperty("os.name").toLowerCase();
+
+        // generate and create data path
+        if (os.startsWith("windows")) {
+            DATA_PATH = System.getenv("APPDATA") + "/" + NAMESPACE;
+        } else { DATA_PATH = "/etc/" + NAMESPACE + ""; }
+
+        NATIVES_PATH = DATA_PATH + "/natives";
+
+        File f_dp = new File(DATA_PATH);
+        File f_np = new File(NATIVES_PATH);
+        if (!f_dp.exists())
+            if (!f_dp.mkdirs())
+                logger.severe("failed to create data path (\"" + DATA_PATH + "\")");
+        if (!f_np.exists())
+            if (!f_np.mkdirs())
+                logger.severe("failed to create natives path (\"" + NATIVES_PATH + "\")");
+
+        // fix win32 ansi
+        if (os.startsWith("windows")) {
+            if (Win32AnsiFixer.load()) {
+                Win32AnsiFixer.fix();
+            }
+        }
+    }
+
+    /** Native class which should 'fix' (enable ansi support for) the Windows console. */
+    static class Win32AnsiFixer {
+
+        public static final String NATIVES_PREFIX  = "spruce-win32ansifixer";
+        public static final String NATIVES_VERSION = "1.0";
+
+        /** Loads and initializes the natives and other things required for this feature. */
+        public static boolean load() {
+            // get architecture
+            String arch;
+            String arch_raw = System.getProperty("os.arch");
+            if (arch_raw.contains("64")) arch = "64";
+            else                         arch = "32";
+
+            // create file(name)
+            String fname = NATIVES_PREFIX + "-v" + NATIVES_VERSION + "_" + arch + ".dll";
+            String fpath = NATIVES_PATH   + "/"  + fname;
+            File   f     = new File(fpath);
+
+            try {
+                // check if the file doesnt exist
+                if (!f.exists()) {
+                    // get resource stream
+                    InputStream stream = Spruce.class.getResourceAsStream(fname);
+                    if (stream == null) {
+                        logger.severe("failed to extract Win32AnsiFixer from dll, file does not exist.");
+                        return false;
+                    }
+
+                    // write data (creates the file as well)
+                    Files.copy(stream, f.toPath());
+                }
+
+                // load library
+                System.load(fpath);
+            } catch (Exception e) {
+                // log error
+                logger.severe("an error occurred while loading the Win32AnsiFixer;");
+                e.printStackTrace();
+
+                // return unsuccessful
+                return false;
+            }
+
+            // return successful
+            return true;
+        }
+
+        /** @implNote Win32AnsiFixer.cpp */
+        public static native void fix();
+
+    }
+
+}
+
+/**
+ * This is required to initialize Spruce on startup.
+ */
+abstract class Initializer {
+    boolean isInitialized;
+
+    public Initializer() {
+        try {
+            Spruce.initialize(); isInitialized = true;
+        } catch (Exception e) { System.out.println("(!) failed to initialize Spruce;"); e.printStackTrace(); }
+    }
+
+    public boolean isInitialized() { return isInitialized; }
+}

@@ -6,6 +6,7 @@ import io.spruce.util.color.arg.ColorType;
 import io.spruce.util.color.arg.Space;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class ChatColor extends ColorAttr implements Cloneable {
 
@@ -17,14 +18,16 @@ public class ChatColor extends ColorAttr implements Cloneable {
     private static final String TRUE_COLOR_P = "2;";
     private static final String EBIT_COLOR_P = "5;";
 
+    private boolean isBright;
+
     private boolean   isLiteral;
     private int       literal;
 //    private ColorType colorType;
 
     /**
-     * Is the specified color a background color?
+     * In what space should this color be used by default?
      */
-    private Space space;
+    private Space space = Space.FOREGROUND;
 
     /*               */
     /* Constructors. */
@@ -36,6 +39,9 @@ public class ChatColor extends ColorAttr implements Cloneable {
         super(0, 0, 0);
         this.isLiteral = true;
         this.literal   = c;
+
+        if (literal >= 90 && 107 >= literal)
+            isBright = true;
     }
 
 //    public ChatColor(int c, ColorType type) {
@@ -100,8 +106,12 @@ public class ChatColor extends ColorAttr implements Cloneable {
 
         // check if it is literal
         if (isLiteral) {
-            int l = literal + (space == Space.BACKGROUND ? 10 : 0);
-            return Integer.toString(l);
+            int    l = literal;
+            if (space == Space.BACKGROUND) l += 10;
+            String s = Integer.toString(l);
+//            if (isBright)
+//                s += Ansi.SEPARATOR + "1";
+            return s;
         }
 
         // return super code

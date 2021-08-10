@@ -5,6 +5,11 @@ import io.spruce.pipeline.Pipeline;
 import io.spruce.arg.LogLevel;
 
 public abstract class Logger {
+
+    // this is required to load spruces
+    static int _INIT;
+    static { _INIT = 1; Spruce._initializer.isInitialized(); }
+
     /**
      * A tag/ID that the logger can be recognized by.
      */
@@ -64,12 +69,15 @@ public abstract class Logger {
     /**
      * Formats a string using the <code>formatPrimary(...)</code> method
      * and writes/logs it using the <code>write(...)</code> method.
-     * @param s The message.
+     * @param o The message.
      * @param l The logging level.
      * @param extra Extra parameters that the
      *              logger may accept.
      */
-    public void log(String s, LogLevel l, Object... extra) {
+    public void log(Object o, LogLevel l, Object... extra) {
+        // tostring object
+        String s = (o != null) ? o.toString() : "null";
+
         // format string
         String formatted = this.formatPrimary(s, l, extra);
 
@@ -84,9 +92,9 @@ public abstract class Logger {
         this.write(event);
     }
 
-    public void info   (String s) { this.log(s, LogLevel.INFO); }
-    public void warn   (String s) { this.log(s, LogLevel.WARN); }
-    public void severe (String s) { this.log(s, LogLevel.SEVERE); }
+    public void info   (Object s) { this.log(s, LogLevel.INFO); }
+    public void warn   (Object s) { this.log(s, LogLevel.WARN); }
+    public void severe (Object s) { this.log(s, LogLevel.SEVERE); }
 
     /* Basic getters and setters. */
 
