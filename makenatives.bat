@@ -37,12 +37,3 @@ cd ..
 
 :: Exit folder
 cd ../../..
-
-:: Copy "build/natives" to "build/natives/natives" for Gradle to work
-cd build/natives
-mkdir natives
-
-for /r %%i in (*) do move %%i natives/%%i
-
-:: Exit folder
-cd ../..
