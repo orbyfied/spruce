@@ -32,6 +32,31 @@ Spruce has a many notable features, but I will only show the following in this s
   * Basic logging (with pipeline)
   * Custom loggers
   * Coloured (and formatted) text
+  
+But before that, you will **always** have to initialize Spruce.
+This is as simple as calling the Spruce constructor, without having to store
+the instance. You're not required to give it parameters, but you can do some
+pretty useful/powerful stuff using it, for example; set the default pipeline that
+all loggers will use upon creation, or set the default set of output streams
+for any `StandardLogger` that will be created. *More settings will be added in the
+future.*
+
+Now lets see how to do this;
+```java
+public class Test {
+    public static void main(String[] args) {
+        // without parameters
+        new Spruce();
+
+        // with a default handler
+        new Spruce(event -> { /* your code */ });
+
+        // removing the stdout stream and adding a ByteArrayOutputStream.
+        ByteArrayOutputStream s = new ByteArrayOutputStream();
+        new Spruce(s, new RemoveOutStream(System.out));
+    }
+}
+```
 
 ### Basic Logging (With pipeline)
 
@@ -41,6 +66,9 @@ This is actually relatively simple to do using `spruce`:
 ```java
 public class Test {
    public static void main(String[] args) throws IOException {
+      // of course, first initialize Spruce
+      new Spruce();
+
       // create a new file reference
       // for simplicity, this code assumes that the file already exists
       File logFile = new File("log_" + new Date());
@@ -55,9 +83,9 @@ public class Test {
       // is basically a string of event handlers made
       // to execute events called by the logger once,
       // for example, a message is sent.
-      LoggerPipeline<LogEvent> pipeline = logger.pipeline();
+      LoggerPipeline<Record> pipeline = logger.pipeline();
 
-      // add an event handler that handles the specified 'LogEvent'
+      // add an event handler that handles the specified 'Record' (Log event)
       pipeline.addLast(event -> {
          // event.text is a StringBuilder containing the
          // formatted string. the result of this builder
@@ -89,6 +117,9 @@ If you want to make your own logger from scratch you will need to extend the abs
 // main class
 public class Main {
     public static void main(String[] args) {
+        // init Spruce
+        new Spruce();
+
         // construct loggers
         MyLogger1 l1 = new MyLogger1("1");
         MyLogger2 l2 = new MyLogger2("2");
@@ -113,7 +144,7 @@ class MyLogger1 extends StandardLogger { // StandardLogger is the 'prefab' logge
     }
 
     @Override
-    public void write(LogEvent event) {
+    public void write(Record event) {
         // write " [HELLO]" to the end of the final text
         event.text().append(" [HELLO]");
 
@@ -137,13 +168,13 @@ class MyLogger2 extends Logger {
     //                                                         before it is sent to the LogEvent and pipeline.
 
     @Override
-    protected void write(LogEvent event) {
+    protected void write0(Record event) {
         // we will just print the text to the console, but colored in red
         System.out.println(ChatColor.RED_FG + event.text().toString());
     }
 
     @Override
-    protected String formatPrimary(String text, LogLevel lvl, Object... args) {
+    protected String format0(String text, LogLevel lvl, Object... args) {
         // for this example we will just return the logging level with the text
         return "[" + lvl.getTag() + "] " + text;
     }

@@ -1,10 +1,11 @@
 package io.spruce.standard;
 
 import io.spruce.LoggerFactory;
+import io.spruce.Spruce;
 import io.spruce.arg.RemoveOutStream;
 import io.spruce.pipeline.Handler;
 import io.spruce.pipeline.Pipeline;
-import io.spruce.event.LogEvent;
+import io.spruce.event.Record;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -30,7 +31,7 @@ public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
     }
 
     @Override
-    protected void apply0(StandardLogger logger, List<Handler<LogEvent>> handlerList, String tag, List<Object> other) {
+    protected void apply0(StandardLogger logger, List<Handler<Record>> handlerList, String tag, List<Object> other) {
         // process basic parameters
         logger.pipeline(new Pipeline<>(handlerList));
         logger.setTag(tag);
@@ -44,6 +45,9 @@ public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
                 logger.removeOutStream(((RemoveOutStream) arg).getStream());
 
         }
+
+        // add default output streams
+        logger.getOutStreams().addAll(Spruce.getConfigurationInstance().cDefaultOutputStreams);
     }
 
 }

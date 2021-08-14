@@ -1,14 +1,12 @@
 package io.spruce;
 
-import io.spruce.event.LogEvent;
+import io.spruce.event.Record;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.arg.LogLevel;
 
-public abstract class Logger {
+import java.util.function.Supplier;
 
-    // this is required to load spruces
-    static int _INIT;
-    static { _INIT = 1; Spruce._initializer.isInitialized(); }
+public abstract class Logger {
 
     /**
      * A tag/ID that the logger can be recognized by.
@@ -24,7 +22,7 @@ public abstract class Logger {
     /**
      * A pipeline of handlers. Used to process events.
      */
-    protected Pipeline<LogEvent> pipeline;
+    protected Pipeline<Record> pipeline;
 
     /** Basic constructor. */
     public Logger(String id) {
@@ -42,13 +40,13 @@ public abstract class Logger {
      * Gets the logger's pipeline.
      * @return The LoggerPipeline.
      */
-    public Pipeline<LogEvent> pipeline() { return pipeline; }
+    public Pipeline<Record> pipeline() { return pipeline; }
 
     /**
      * Sets the pipeline.
      * @param pipeline The pipeline.
      */
-    public void pipeline(Pipeline<LogEvent> pipeline) { this.pipeline = pipeline.cloneFor(this); }
+    public void pipeline(Pipeline<Record> pipeline) { this.pipeline = pipeline.cloneFor(this); }
 
     ////////////////////////////////////////////////////////
 
@@ -56,7 +54,7 @@ public abstract class Logger {
      * Writes a message.
      * @param data The information.
      */
-    protected abstract void write(LogEvent data);
+    protected abstract void write0(Record data);
 
     /**
      * Formats a string into something that
@@ -64,7 +62,7 @@ public abstract class Logger {
      * parameter values.
      * @return The formatted string.
      */
-    protected abstract String formatPrimary(String text, LogLevel level, Object... extra);
+    protected abstract String format0(String text, LogLevel level, Object... extra);
 
     /**
      * Formats a string using the <code>formatPrimary(...)</code> method
@@ -79,22 +77,26 @@ public abstract class Logger {
         String s = (o != null) ? o.toString() : "null";
 
         // format string
-        String formatted = this.formatPrimary(s, l, extra);
+        String formatted = this.format0(s, l, extra);
 
         // construct event
-        LogEvent event = new LogEvent(this, s, l, formatted);
+        Record event = new Record(this, s, l, formatted);
 
         // call event and return if cancelled
         boolean accepted = pipeline.event(event);
         if (!accepted) return;
 
         // retrieve and write message
-        this.write(event);
+        this.write0(event);
     }
 
-    public void info   (Object s) { this.log(s, LogLevel.INFO); }
-    public void warn   (Object s) { this.log(s, LogLevel.WARN); }
+    public void info   (Object s) { this.log(s, LogLevel.INFO);   }
+    public void warn   (Object s) { this.log(s, LogLevel.WARN);   }
     public void severe (Object s) { this.log(s, LogLevel.SEVERE); }
+
+    public void info   (Supplier<?> s) { this.log(s.get(), LogLevel.INFO);   }
+    public void warn   (Supplier<?> s) { this.log(s.get(), LogLevel.WARN);   }
+    public void severe (Supplier<?> s) { this.log(s.get(), LogLevel.SEVERE); }
 
     /* Basic getters and setters. */
 

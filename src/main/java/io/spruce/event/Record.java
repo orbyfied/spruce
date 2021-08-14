@@ -6,7 +6,7 @@ import io.spruce.pipeline.Event;
 
 import java.util.logging.Formatter;
 
-public class LogEvent extends Event {
+public class Record extends Event {
     Logger   logger;
     String   raw;
     LogLevel level;
@@ -15,7 +15,7 @@ public class LogEvent extends Event {
     StringBuilder finalTextBuilder;
     StringBuilder suffixBuilder;
 
-    public LogEvent(Logger logger, String raw, LogLevel level, String currentFinalText) {
+    public Record(Logger logger, String raw, LogLevel level, String currentFinalText) {
         this.logger = logger;
         this.raw    = raw;
         this.level  = level;

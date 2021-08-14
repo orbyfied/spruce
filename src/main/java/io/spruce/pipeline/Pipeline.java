@@ -25,7 +25,8 @@ public class Pipeline<EVENT extends Event> {
     private Map<String, Handler<EVENT>> handlersByName = new HashMap<>();
 
     /* Constructors. */
-    public Pipeline(Logger logger)                                   { this.logger = logger; }
+    public Pipeline()                                             { }
+    public Pipeline(Logger logger)                                { this.logger = logger; }
     public Pipeline(Logger logger, List<Handler<EVENT>> handlers) { this(logger); this.handlers = handlers; }
     public Pipeline(List<Handler<EVENT>> handlers)                { this.handlers = handlers; }
 

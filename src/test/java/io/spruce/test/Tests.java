@@ -1,5 +1,7 @@
 package io.spruce.test;
 
+import io.spruce.Spruce;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -7,6 +9,10 @@ public class Tests {
     public static final File testDir = new File(".test");
 
     static {
+        // initialize spruce
+        new Spruce();
+
+        // create test directory
         try {
             if (!testDir.exists())
                 testDir.mkdir();

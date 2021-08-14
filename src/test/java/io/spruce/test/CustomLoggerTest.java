@@ -2,7 +2,7 @@ package io.spruce.test;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
-import io.spruce.event.LogEvent;
+import io.spruce.event.Record;
 import io.spruce.standard.StandardLogger;
 import io.spruce.util.color.attributes.ChatColor;
 
@@ -32,12 +32,12 @@ class MyLogger1 extends StandardLogger { // StandardLogger is the 'prefab' logge
     }
 
     @Override
-    public void write(LogEvent event) {
+    public void write0(Record event) {
         // write " [HELLO]" to the end of the final text
         event.text().append(" [HELLO]");
 
         // call StandardLogger's write method to keep its functionality
-        super.write(event);
+        super.write0(event);
     }
 }
 
@@ -56,13 +56,13 @@ class MyLogger2 extends Logger {
     //                                                         before it is sent to the LogEvent and pipeline.
 
     @Override
-    protected void write(LogEvent event) {
+    protected void write0(Record event) {
         // we will just print the text to the console, but colored in red
         System.out.println(ChatColor.RED_FG + event.text().toString());
     }
 
     @Override
-    protected String formatPrimary(String text, LogLevel lvl, Object... args) {
+    protected String format0(String text, LogLevel lvl, Object... args) {
         // for this example we will just return the logging level with the text
         return "[" + lvl.getTag() + "] " + text;
     }

@@ -2,7 +2,7 @@ package io.spruce.standard;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
-import io.spruce.event.LogEvent;
+import io.spruce.event.Record;
 import io.spruce.util.color.Ansi;
 import io.spruce.util.color.attributes.ChatColor;
 
@@ -29,7 +29,6 @@ public class StandardLogger extends Logger {
     public StandardLogger(String id, List<OutputStream> streams) {
         super(id);
         this.outStreams = streams;
-        outStreams.add(System.out); // add system.out as a default output stream
     }
 
     /*                                     */
@@ -42,7 +41,7 @@ public class StandardLogger extends Logger {
     public void removeOutStream(OutputStream stream) { this.outStreams.remove(stream); }
 
     @Override
-    protected void write(LogEvent event) {
+    protected void write0(Record event) {
         // create final string and convert to UTF-8 bytes
         String s  = event.prefix()          +
                     event.text().toString() +
@@ -64,7 +63,7 @@ public class StandardLogger extends Logger {
     }
 
     @Override
-    protected String formatPrimary(String text, LogLevel level, Object... extra) {
+    protected String format0(String text, LogLevel level, Object... extra) {
         // create string builder options
         StringBuilder builder = new StringBuilder();
 

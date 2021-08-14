@@ -1,12 +1,18 @@
 package io.spruce;
 
+import io.spruce.arg.RemoveOutStream;
+import io.spruce.event.Record;
+import io.spruce.pipeline.Handler;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.standard.StandardLogger;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Spruce v1.0 (by orbyfied)
@@ -16,6 +22,63 @@ import java.nio.file.Path;
  * Spruce library initializer and interface.
  */
 public class Spruce {
+
+    // INSTANCE CONFIGURATIONS
+    public final List<OutputStream> cDefaultOutputStreams = new ArrayList<>(Arrays.asList(System.out));
+    public final Pipeline<Record> cDefaultPipeline      = new Pipeline<>();
+
+    /**
+     * Spruce initializer.
+     * @param args The parameters.
+     */
+    public Spruce(Object... args) {
+        // TODO: process parameters
+        // iterate over parameters
+        int l = args.length;
+        for (int i = 0; i < l; i++) {
+            // get param
+            Object arg = args[i];
+
+            // process
+            if      (arg instanceof OutputStream)    this.cDefaultOutputStreams.add((OutputStream) arg);
+            else if (arg instanceof RemoveOutStream) this.cDefaultOutputStreams.remove(((RemoveOutStream) arg).getStream());
+
+            else if (arg instanceof Handler) { cDefaultPipeline.addLast((Handler) arg); }
+
+            else if (arg instanceof String) {
+                // get str
+                String str = (String) arg;
+
+                // test for expression
+                if (str.startsWith("!")) {
+                    // remove !
+                    str = str.substring(1);
+
+                    // parse
+                    StringBuilder b = new StringBuilder();
+
+                    char[] chars = str.toCharArray();
+                    for (char c : chars) {
+                        // TODO: impl
+                    }
+                }
+            }
+        }
+
+        // initialize
+        initialize();
+    }
+
+    private static boolean uIsValidIdChar(char c) {
+        c = Character.toLowerCase(c);
+        return  ((c <= '9' && c >= '0') || (c <= 'z' && c >= 'a')) || c == '_';
+    }
+
+    /**
+     * The Spruce configuration instance.
+     */
+    private static Spruce spruce;
+    public static Spruce getConfigurationInstance() { return spruce; }
 
     private static final StandardLogger logger = LoggerFactory.standard().make("tag:Spruce", "id:spruce-system");
 
@@ -41,8 +104,9 @@ public class Spruce {
      */
     public static final String VERSION = "1.0";
 
-    // init
-    protected static final Initializer _initializer = new Initializer(){};
+    public static boolean isInitialized() {
+        return spruce != null;
+    }
 
     /**
      * Initializes Spruce.
@@ -128,19 +192,4 @@ public class Spruce {
 
     }
 
-}
-
-/**
- * This is required to initialize Spruce on startup.
- */
-abstract class Initializer {
-    boolean isInitialized;
-
-    public Initializer() {
-        try {
-            Spruce.initialize(); isInitialized = true;
-        } catch (Exception e) { System.out.println("(!) failed to initialize Spruce;"); e.printStackTrace(); }
-    }
-
-    public boolean isInitialized() { return isInitialized; }
 }
