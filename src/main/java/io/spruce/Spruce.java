@@ -32,6 +32,9 @@ public class Spruce {
      * @param args The parameters.
      */
     public Spruce(Object... args) {
+        // set instance
+        spruce = this;
+
         // TODO: process parameters
         // iterate over parameters
         int l = args.length;
@@ -80,7 +83,7 @@ public class Spruce {
     private static Spruce spruce;
     public static Spruce getConfigurationInstance() { return spruce; }
 
-    private static final StandardLogger logger = LoggerFactory.standard().make("tag:Spruce", "id:spruce-system");
+    private static StandardLogger logger;
 
     /**
      * The Spruce data namespace.
@@ -112,6 +115,9 @@ public class Spruce {
      * Initializes Spruce.
      */
     protected static void initialize() {
+        // initialize logger
+        logger = LoggerFactory.standard().make("tag:Spruce", "id:spruce-system");
+
         // get os name
         String os = System.getProperty("os.name").toLowerCase();
 
@@ -164,7 +170,7 @@ public class Spruce {
                     // get resource stream
                     InputStream stream = Spruce.class.getResourceAsStream(fname);
                     if (stream == null) {
-                        logger.severe("failed to extract Win32AnsiFixer from dll, file does not exist.");
+                        logger.severe("failed to extract Win32AnsiFixer from jar, file does not exist.");
                         return false;
                     }
 

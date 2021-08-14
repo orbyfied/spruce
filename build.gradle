@@ -5,7 +5,7 @@ plugins {
 apply plugin: 'java'
 
 group 'io.orbyfied.spruce'
-version '1.0-a1'
+version '1.0'
 
 sourceCompatibility = 13
 targetCompatibility = 13
