@@ -111,6 +111,9 @@ public class Spruce {
         return spruce != null;
     }
 
+           static Win32 win32;
+    public static Win32 win32() { return win32; }
+
     /**
      * Initializes Spruce.
      */
@@ -139,20 +142,21 @@ public class Spruce {
 
         // fix win32 ansi
         if (os.startsWith("windows")) {
-            if (Win32AnsiFixer.load()) {
-                Win32AnsiFixer.fix();
+            win32 = new Win32();
+            if (win32.load()) {
+                win32.fixVt();
             }
         }
     }
 
     /** Native class which should 'fix' (enable ansi support for) the Windows console. */
-    static class Win32AnsiFixer {
+    static class Win32 {
 
-        public static final String NATIVES_PREFIX  = "spruce-win32ansifixer";
+        public static final String NATIVES_PREFIX  = "spruce-win32";
         public static final String NATIVES_VERSION = "1.0";
 
         /** Loads and initializes the natives and other things required for this feature. */
-        public static boolean load() {
+        public boolean load() {
             // get architecture
             String arch;
             String arch_raw = System.getProperty("os.arch");
@@ -170,7 +174,7 @@ public class Spruce {
                     // get resource stream
                     InputStream stream = Spruce.class.getResourceAsStream(fname);
                     if (stream == null) {
-                        logger.severe("failed to extract Win32AnsiFixer from jar, file does not exist.");
+                        logger.severe("failed to extract Win32 from jar, file does not exist.");
                         return false;
                     }
 
@@ -180,9 +184,12 @@ public class Spruce {
 
                 // load library
                 System.load(fpath);
+
+                // initialize
+                initNative();
             } catch (Exception e) {
                 // log error
-                logger.severe("an error occurred while loading the Win32AnsiFixer;");
+                logger.severe("an error occurred while loading and initializing Win32;");
                 e.printStackTrace();
 
                 // return unsuccessful
@@ -193,8 +200,17 @@ public class Spruce {
             return true;
         }
 
-        /** @implNote Win32AnsiFixer.cpp */
-        public static native void fix();
+        /** @implNote Win32.cpp */
+        public native void initNative();
+
+        /** @implNote Win32.cpp */
+        public native void fixVt();
+
+        /** @implNote Win32.cpp */
+        public native void setInFlag(long f, boolean b);
+
+        /** @implNote Win32.cpp */
+        public native void setOutFlag(long f, boolean b);
 
     }
 

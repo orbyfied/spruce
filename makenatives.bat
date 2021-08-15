@@ -17,10 +17,10 @@ cd src/main/c
 :: Win32AnsiFixer
 
 echo ...........................
-echo Win32AnsiFixer
+echo Win32
 echo ...........................
 
-cd win32_ansi_fixer
+cd win32
 
 echo .
 echo . x86

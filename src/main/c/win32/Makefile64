@@ -70,7 +70,7 @@ INCLUDE	:= .
 LIB	:=
 
 # VERSION OPTIONS
-FILE_PREFIX := spruce-win32ansifixer
+FILE_PREFIX := spruce-win32
 VERSION     := 1.0
 
 # OS stuff (dont recommend touching this)
