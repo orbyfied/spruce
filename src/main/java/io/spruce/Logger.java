@@ -4,6 +4,7 @@ import io.spruce.event.Record;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.arg.LogLevel;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class Logger {
@@ -97,6 +98,21 @@ public abstract class Logger {
     public void info   (Supplier<?> s) { this.log(s.get(), LogLevel.INFO);   }
     public void warn   (Supplier<?> s) { this.log(s.get(), LogLevel.WARN);   }
     public void severe (Supplier<?> s) { this.log(s.get(), LogLevel.SEVERE); }
+
+    public void info   (Object s, Object... args) { this.log(s, LogLevel.INFO,   args); }
+    public void warn   (Object s, Object... args) { this.log(s, LogLevel.WARN,   args); }
+    public void severe (Object s, Object... args) { this.log(s, LogLevel.SEVERE, args); }
+
+    public void info   (Supplier<String> s, Object... args) { this.log(s.get(), LogLevel.INFO,   args); }
+    public void warn   (Supplier<String> s, Object... args) { this.log(s.get(), LogLevel.WARN,   args); }
+    public void severe (Supplier<String> s, Object... args) { this.log(s.get(), LogLevel.SEVERE, args); }
+
+    public void info(Function<Logger, String> f, Object... args) {
+        this.log(f.apply(this), LogLevel.INFO, args); }
+    public void warn(Function<Logger, String> f, Object... args) {
+        this.log(f.apply(this), LogLevel.WARN, args); }
+    public void severe(Function<Logger, String> f, Object... args) {
+        this.log(f.apply(this), LogLevel.SEVERE, args); }
 
     /* Basic getters and setters. */
 

@@ -156,7 +156,8 @@ SRCOBJECTS := $(patsubst %.cpp,%.o,$(SOURCES))
 # make main path
 OUTPUTMAIN	:= $(call FIXPATH,$(OUTPUT)/$(MAIN))
 
-RAW_INCL := -I"${JAVA_HOME}\include" -I"${JAVA_HOME}\include\$(v_os)32" -I"${JAVA_HOME}\include\$(v_os)64" -I"$(PROJECT_DIR_RELATIVE)\build\generated\sources\headers\java\main"
+WIN_SDK_INCL := C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0
+RAW_INCL := -I"${JAVA_HOME}\include" -I"${JAVA_HOME}\include\$(v_os)32" -I"${JAVA_HOME}\include\$(v_os)64" -I"$(PROJECT_DIR_RELATIVE)\build\generated\sources\headers\java\main" -I"$(WIN_SDK_INCL)\um\" -I"$(WIN_SDK_INCL)\shared\"
 
 all: $(OUTPUT) $(MAIN) # execute all (output and compile)
 	$(info -----all done)

@@ -78,7 +78,12 @@ public class StandardLogger extends Logger {
             case SEVERE:
                 builder.append(ChatColor.RED_FG + "SEVERE");
                 break;
-
+            case INFO:
+                builder.append(ChatColor.AQUA_FG + "INFO");
+                break;
+            case WARN:
+                builder.append(ChatColor.YELLOW_FG + "WARN");
+                break;
             default:
                 builder.append(new ChatColor(160, 160, 160) + level.getTag().toUpperCase());
         }
