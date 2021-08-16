@@ -20,8 +20,9 @@ hs_err_pid*
 /.gradle/
 /gradle/wrapper/*.jar
 
-# VSCode stuff
+# IDE stuff
 /.vscode/
+/.idea/
 
 # Test results
 <<<<<<< HEAD
