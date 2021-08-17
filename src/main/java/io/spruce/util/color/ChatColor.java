@@ -1,6 +1,7 @@
-package io.spruce.util.color.attr;
+package io.spruce.util.color;
 
 import io.spruce.util.color.arg.Space;
+import io.spruce.util.color.attr.ColorAttr;
 
 import java.awt.*;
 
@@ -165,21 +166,37 @@ public class ChatColor extends ColorAttr implements Cloneable {
                 public static final ChatColor ENCIRCLED = new ChatColor(52);
                 public static final ChatColor OVERLINED = new ChatColor(53);
 
-    public static final ChatColor WHITE_FG = new ChatColor(30);
-    public static final ChatColor WHITE_BG = WHITE_FG.bg();
-    public static final ChatColor RED_FG = new ChatColor(31);
-    public static final ChatColor RED_BG = RED_FG.bg();
-    public static final ChatColor LIME_FG = new ChatColor(32);
-    public static final ChatColor LIME_BG = LIME_FG.bg();
-    public static final ChatColor YELLOW_FG = new ChatColor(33);
-    public static final ChatColor YELLOW_BG = YELLOW_FG.bg();
-    public static final ChatColor BLUE_FG = new ChatColor(34);
-    public static final ChatColor BLUE_BG = BLUE_FG.bg();
-    public static final ChatColor PINK_FG = new ChatColor(35);
-    public static final ChatColor PINK_BG = PINK_FG.bg();
-    public static final ChatColor AQUA_FG = new ChatColor(36);
-    public static final ChatColor AQUA_BG = AQUA_FG.bg();
+    public static final ChatColor BLACK_FG = new ChatColor(30);
+    public static final ChatColor BLACK_BG = BLACK_FG.bg();
+    public static final ChatColor DARK_RED_FG = new ChatColor(31);
+    public static final ChatColor DARK_RED_BG = DARK_RED_FG.bg();
+    public static final ChatColor DARK_GREEN_FG = new ChatColor(32);
+    public static final ChatColor DARK_GREEN_BG = DARK_GREEN_FG.bg();
+    public static final ChatColor DARK_YELLOW_FG = new ChatColor(33);
+    public static final ChatColor DARK_YELLOW_BG = DARK_YELLOW_FG.bg();
+    public static final ChatColor DARK_BLUE_FG = new ChatColor(34);
+    public static final ChatColor DARK_BLUE_BG = DARK_BLUE_FG.bg();
+    public static final ChatColor DARK_PINK_FG = new ChatColor(35);
+    public static final ChatColor DARK_PINK_BG = DARK_PINK_FG.bg();
+    public static final ChatColor DARK_AQUA_FG = new ChatColor(36);
+    public static final ChatColor DARK_AQUA_BG = DARK_AQUA_FG.bg();
     public static final ChatColor DARK_GRAY_FG = new ChatColor(37);
     public static final ChatColor DARK_GRAY_BG = DARK_GRAY_FG.bg();
+    public static final ChatColor WHITE_FG = new ChatColor(30);
+    public static final ChatColor WHITE_BG = WHITE_FG.bg();
+    public static final ChatColor RED_FG = new ChatColor(81);
+    public static final ChatColor RED_BG = RED_FG.bg();
+    public static final ChatColor GREEN_FG = new ChatColor(82);
+    public static final ChatColor GREEN_BG = GREEN_FG.bg();
+    public static final ChatColor YELLOW_FG = new ChatColor(83);
+    public static final ChatColor YELLOW_BG = YELLOW_FG.bg();
+    public static final ChatColor BLUE_FG = new ChatColor(84);
+    public static final ChatColor BLUE_BG = BLUE_FG.bg();
+    public static final ChatColor PINK_FG = new ChatColor(85);
+    public static final ChatColor PINK_BG = PINK_FG.bg();
+    public static final ChatColor AQUA_FG = new ChatColor(86);
+    public static final ChatColor AQUA_BG = AQUA_FG.bg();
+    public static final ChatColor GRAY_FG = new ChatColor(87);
+    public static final ChatColor GRAY_BG = DARK_GRAY_FG.bg();
 
 }

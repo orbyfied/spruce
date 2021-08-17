@@ -1,12 +1,12 @@
 package io.spruce.test;
 
+import io.spruce.util.color.ChatColor;
+
 public class RandomTests {
     public static void main(String[] args) {
 
-        long s = 0b01111111111111111111111111111111111111111111111111111111111111111L;
-        System.out.println(s);
-        System.out.println(s & 0b111111);
-        System.out.println(s & -0b111111);
+        System.out.println(new ChatColor(37) + "37");
+        System.out.println(new ChatColor(87) + "87");
 
     }
 }

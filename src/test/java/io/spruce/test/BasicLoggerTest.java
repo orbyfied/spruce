@@ -2,7 +2,7 @@ package io.spruce.test;
 
 import io.spruce.LoggerFactory;
 import io.spruce.standard.StandardLogger;
-import io.spruce.util.color.attr.ChatColor;
+import io.spruce.util.color.ChatColor;
 
 import java.io.File;
 import java.io.FileOutputStream;
