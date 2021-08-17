@@ -1,12 +1,8 @@
-package io.spruce.util.color.attributes;
+package io.spruce.util.color.attr;
 
-import io.spruce.util.color.Ansi;
-import io.spruce.util.color.AnsiAttr;
-import io.spruce.util.color.arg.ColorType;
 import io.spruce.util.color.arg.Space;
 
 import java.awt.*;
-import java.util.Arrays;
 
 public class ChatColor extends ColorAttr implements Cloneable {
 

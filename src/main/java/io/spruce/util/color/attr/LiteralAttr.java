@@ -1,4 +1,4 @@
-package io.spruce.util.color.attributes;
+package io.spruce.util.color.attr;
 
 import io.spruce.util.color.AnsiAttr;
 

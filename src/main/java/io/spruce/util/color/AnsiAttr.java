@@ -1,8 +1,5 @@
 package io.spruce.util.color;
 
-import io.spruce.internal.ArrayUtils;
-import io.spruce.util.color.attributes.ChatColor;
-
 /**
  * Represents an
  */

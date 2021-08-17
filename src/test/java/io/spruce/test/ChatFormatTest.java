@@ -1,7 +1,6 @@
 package io.spruce.test;
 
-import io.spruce.util.color.Ansi;
-import io.spruce.util.color.attributes.ChatColor;
+import io.spruce.util.color.attr.ChatColor;
 
 public class ChatFormatTest {
     public static void main(String[] args) {

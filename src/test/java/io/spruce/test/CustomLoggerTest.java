@@ -4,7 +4,7 @@ import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
 import io.spruce.event.Record;
 import io.spruce.standard.StandardLogger;
-import io.spruce.util.color.attributes.ChatColor;
+import io.spruce.util.color.attr.ChatColor;
 
 public class CustomLoggerTest {
     public static void main(String[] args) {
