@@ -1,5 +1,6 @@
 package io.spruce;
 
+import io.spruce.meta.Nullable;
 import io.spruce.pipeline.Handler;
 import io.spruce.event.Record;
 import io.spruce.pipeline.Pipeline;
@@ -19,7 +20,7 @@ public abstract class LoggerFactory<T extends Logger> {
      * @param id The logger's id.
      * @return The new instance.
      */
-    protected abstract T new0(String id);
+    protected abstract T new0(@Nullable String id);
 
     /**
      * Applies the specified parameters to the logger.
@@ -28,7 +29,12 @@ public abstract class LoggerFactory<T extends Logger> {
      * @param handlerList The list of handlers, meant for the pipeline.
      * @param other Other parameters.
      */
-    protected abstract void apply0(T logger, List<Handler<Record>> handlerList, String tag, List<Object> other);
+    protected abstract void apply0(
+            T logger,
+            List<Handler<Record>> handlerList,
+            @Nullable String tag,
+            List<Object> other
+    );
 
     /**
      * Creates a new logger of type T.
@@ -36,11 +42,25 @@ public abstract class LoggerFactory<T extends Logger> {
      * @return The new logger.
      */
     public T make(Object... args) {
+        // check if the caller is from the system
+        boolean _systemRequest = false;
+        try { throw new Exception(); }
+        catch (Exception e) {
+            StackTraceElement[] stack = e.getStackTrace();
+            StackTraceElement   el    = stack[1];
+            if (el.getClassName().startsWith("io.spruce."))
+                _systemRequest = true;
+        }
+
+        // check if initialized
+        if (!_systemRequest)
+            uAssertInitialized();
+
         // iterate, process and collect arguments
-        String                     id       = null;
-        String                     tag      = null;
+        String                id       = null;
+        String                tag      = null;
         List<Handler<Record>> handlers = new ArrayList<>();
-        List<Object>               other    = new ArrayList<>();
+        List<Object>          other    = new ArrayList<>();
 
         for (Object arg : args) {
             // process arg
@@ -71,7 +91,12 @@ public abstract class LoggerFactory<T extends Logger> {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /** UTIL: Quick check if Spruce has been enabled yet. */
+    private static void uAssertInitialized() {
+        if (!Spruce.isInitialized()) { throw new IllegalStateException("Spruce has not been initialized yet."); }
+    }
+
     /** UTIL: Quick class check. */
-    private boolean uIs(Object o, String cls) { return o.getClass().getSimpleName().equals(cls); }
+    private static boolean uIs(Object o, String cls) { return o.getClass().getSimpleName().equals(cls); }
 
 }

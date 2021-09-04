@@ -12,17 +12,17 @@
 static HANDLE stdout_handle;
 static HANDLE stdin_handle;
 
-JNIEXPORT void JNICALL _M_FIX_ANSI(JNIEnv* env, jobject _o) {
-    // set console mode
-    SetConsoleMode(stdout_handle, ENABLE_VIRTUAL_TERMINAL_PROCESSING | ENABLE_PROCESSED_OUTPUT);
-}
-
 JNIEXPORT void JNICALL _M_INIT_NTV(JNIEnv* env, jobject _o) {
     // get out handle
     stdout_handle = GetStdHandle(STD_OUTPUT_HANLDE);
 
     // get in handle
     stdin_handle = GetStdHandle(STD_INPUT_HANLDE);
+}
+
+JNIEXPORT void JNICALL _M_FIX_ANSI(JNIEnv* env, jobject _o) {
+    // set console mode
+    SetConsoleMode(stdout_handle, ENABLE_VIRTUAL_TERMINAL_PROCESSING | ENABLE_PROCESSED_OUTPUT);
 }
 
 JNIEXPORT void JNICALL _M_SET_OFLG(JNIEnv* env, jobject _o, jlong f, jboolean b) {

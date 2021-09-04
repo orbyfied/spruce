@@ -46,7 +46,7 @@ public class Spruce {
             if      (arg instanceof OutputStream)    this.cDefaultOutputStreams.add((OutputStream) arg);
             else if (arg instanceof RemoveOutStream) this.cDefaultOutputStreams.remove(((RemoveOutStream) arg).getStream());
 
-            else if (arg instanceof Handler) { cDefaultPipeline.addLast((Handler) arg); }
+            else if (arg instanceof Handler) { cDefaultPipeline.addLast((Handler<Record>) arg); }
 
             else if (arg instanceof String) {
                 // get str

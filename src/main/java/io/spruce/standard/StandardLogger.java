@@ -74,14 +74,14 @@ public class StandardLogger extends Logger {
         // append log level
         builder.append(ChatColor.BOLD + "[");
 
-        switch (level) {
-            case SEVERE:
+        switch (level.getId()) {
+            case "std.severe":
                 builder.append(ChatColor.RED_FG + "SEVERE");
                 break;
-            case INFO:
+            case "std.info":
                 builder.append(ChatColor.AQUA_FG + "INFO");
                 break;
-            case WARN:
+            case "std.warn":
                 builder.append(ChatColor.YELLOW_FG + "WARN");
                 break;
             default:

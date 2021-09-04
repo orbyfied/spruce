@@ -1,4 +1,4 @@
-package io.spruce.test;
+package io.sprucetest;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
