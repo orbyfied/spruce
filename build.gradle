@@ -1,8 +1,10 @@
 plugins {
     id 'java'
+    id 'cpp'
 }
 
 apply plugin: 'java'
+apply plugin: 'cpp'
 
 group 'io.orbyfied.spruce'
 version '1.0'
@@ -13,11 +15,86 @@ targetCompatibility = 13
 sourceSets {
     main {
         resources {
-            srcDirs "src/main/resources", "build/natives"
+            srcDirs "src/main/resources"
+            include "/build/libs/**.dll"
+
+            // include natives
+            String libfp = "${buildDir}/libs/"
+            File   libf  = new File(libfp);
+            if (!libf.exists())
+                libf.mkdir();
+
+            FileFilter isDir = f -> f.isDirectory();
+            FileFilter isDll = f -> f.getAbsolutePath().endsWith(".dll");
+
+//            System.out.println("LIBDIR: " + libf)
+            for (File file : libf.listFiles(isDir)) {
+//                System.out.println("FILE1: " + file)
+                File filen = new File(file.getAbsolutePath() + "/shared/");
+//                System.out.println("FILE1N: " + filen)
+                for (File file1 : filen.listFiles(isDir)) {
+//                    System.out.println("FILE2: " + file1)
+                    for (File file2 : file1.listFiles(isDll)) {
+//                        System.out.println("FILE3: " + file2)
+                        include(file2.getAbsolutePath())
+                    }
+                }
+            }
         }
     }
 }
 
+model {
+    platforms {
+        x86 {
+            architecture "x86"
+        }
+        x64 {
+            architecture "x86_64"
+        }
+    }
+
+    components {
+        win32(NativeLibrarySpec) {
+            targetPlatform "x86"
+            targetPlatform "x64"
+
+            String v_baseName = "spruce-win32"
+            String v_version  = "1_0"
+            String v_arch     = "64"
+
+            String v_name = v_baseName + "-v" + v_version + "_" + v_arch
+            setBaseName(v_name)
+
+            binaries.all {
+
+                if (v_arch == "64") {
+                    cppCompiler.args '-m64'
+                    linker.args '-m64'
+                }
+
+                cppCompiler.args "-I ${buildDir}/generated/sources/headers/java/main/"
+                if (targetPlatform.operatingSystem.macOsX) {
+                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
+                    cppCompiler.args '-mmacosx-version-min=10.4'
+                    linker.args '-mmacosx-version-min=10.4'
+                } else if (targetPlatform.operatingSystem.linux) {
+                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
+                    cppCompiler.args '-D_FILE_OFFSET_BITS=64'
+                } else if (targetPlatform.operatingSystem.windows) {
+                    cppCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cppCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include/win32"
+                    linker.args "Shlwapi.lib", "Advapi32.lib"
+                } else if (targetPlatform.operatingSystem.freeBSD) {
+                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/freebsd"
+                }
+            }
+        }
+    }
+}
 dependencies {
 
 }

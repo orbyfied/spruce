@@ -153,7 +153,7 @@ public class Spruce {
     static class Win32 {
 
         public static final String NATIVES_PREFIX  = "spruce-win32";
-        public static final String NATIVES_VERSION = "1.0";
+        public static final String NATIVES_VERSION = "1_0";
 
         /** Loads and initializes the natives and other things required for this feature. */
         public boolean load() {
@@ -172,9 +172,9 @@ public class Spruce {
                 // check if the file doesnt exist
                 if (!f.exists()) {
                     // get resource stream
-                    InputStream stream = Spruce.class.getResourceAsStream(fname);
+                    InputStream stream = Spruce.class.getResourceAsStream("/" + fname);
                     if (stream == null) {
-                        logger.severe("failed to extract Win32 from jar, file does not exist.");
+                        logger.severe("failed to extract Win32 from jar, file does not exist. (" + fname +")");
                         return false;
                     }
 
@@ -211,6 +211,11 @@ public class Spruce {
 
         /** @implNote Win32.cpp */
         public native void setOutFlag(long f, boolean b);
+
+        /** @implNote Win32.cpp */
+        public native void setConsoleWindowVisible(boolean b);
+
+        public native void writeConsoleBufferDirect();
 
     }
 

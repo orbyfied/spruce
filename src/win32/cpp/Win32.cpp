@@ -1,6 +1,6 @@
 #include <jni.h>
 #include "Windows.h"
-#include "io_spruce_Spruce_Win32.h"
+//#include "io_spruce_Spruce_Win32.h"
 
 #include "const.hpp"
 
@@ -8,16 +8,17 @@
 #define _M_INIT_NTV Java_io_spruce_Spruce_00024Win32_initNative
 #define _M_SET_OFLG Java_io_spruce_Spruce_00024Win32_setOutFlag
 #define _M_SET_IFLG Java_io_spruce_Spruce_00024Win32_setInFlag
+#define _M_SET_CWNV Java_io_spruce_Spruce_00024Win32_setConsoleWindowVisible
 
 static HANDLE stdout_handle;
 static HANDLE stdin_handle;
 
 JNIEXPORT void JNICALL _M_INIT_NTV(JNIEnv* env, jobject _o) {
     // get out handle
-    stdout_handle = GetStdHandle(STD_OUTPUT_HANLDE);
+    stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
     // get in handle
-    stdin_handle = GetStdHandle(STD_INPUT_HANLDE);
+    stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
 }
 
 JNIEXPORT void JNICALL _M_FIX_ANSI(JNIEnv* env, jobject _o) {
@@ -49,4 +50,12 @@ JNIEXPORT void JNICALL _M_SET_IFLG(JNIEnv* env, jobject _o, jlong f, jboolean b)
 
     // set mode
     SetConsoleMode(stdin_handle, flags);
+}
+
+JNIEXPORT void JNICALL _M_SET_CWNV(JNIEnv* env, jobject _o, jboolean b) {
+    if (b) {
+        FreeConsole();
+    } else {
+        AttachConsole(-1);
+    }
 }
