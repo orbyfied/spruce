@@ -4,7 +4,7 @@
 
 #include "const.hpp"
 
-#define _M_FIX_ANSI Java_io_spruce_Spruce_00024Win32_fixAnsi
+#define _M_FIX_VTPC Java_io_spruce_Spruce_00024Win32_fixVt
 #define _M_INIT_NTV Java_io_spruce_Spruce_00024Win32_initNative
 #define _M_SET_OFLG Java_io_spruce_Spruce_00024Win32_setOutFlag
 #define _M_SET_IFLG Java_io_spruce_Spruce_00024Win32_setInFlag
@@ -21,7 +21,7 @@ JNIEXPORT void JNICALL _M_INIT_NTV(JNIEnv* env, jobject _o) {
     stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
 }
 
-JNIEXPORT void JNICALL _M_FIX_ANSI(JNIEnv* env, jobject _o) {
+JNIEXPORT void JNICALL _M_FIX_VTPC(JNIEnv* env, jobject _o) {
     // set console mode
     SetConsoleMode(stdout_handle, ENABLE_VIRTUAL_TERMINAL_PROCESSING | ENABLE_PROCESSED_OUTPUT);
 }

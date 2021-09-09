@@ -27,15 +27,11 @@ sourceSets {
             FileFilter isDir = f -> f.isDirectory();
             FileFilter isDll = f -> f.getAbsolutePath().endsWith(".dll");
 
-//            System.out.println("LIBDIR: " + libf)
-            for (File file : libf.listFiles(isDir)) {
-//                System.out.println("FILE1: " + file)
+            for (File file : libf.listFiles(isDir)) { // iterate "libs" to find all libraries
+                // enter "shared"
                 File filen = new File(file.getAbsolutePath() + "/shared/");
-//                System.out.println("FILE1N: " + filen)
-                for (File file1 : filen.listFiles(isDir)) {
-//                    System.out.println("FILE2: " + file1)
-                    for (File file2 : file1.listFiles(isDll)) {
-//                        System.out.println("FILE3: " + file2)
+                for (File file1 : filen.listFiles(isDir)) { // iterate over "shared" to find all platforms
+                    for (File file2 : file1.listFiles(isDll)) { // get all dlls
                         include(file2.getAbsolutePath())
                     }
                 }
