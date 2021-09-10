@@ -1,5 +1,5 @@
 # spruce (v1.0-a1)
-[Shield](https://img.shields.io/github/license/orbyfied/spruce)
+![License](https://img.shields.io/github/license/orbyfied/spruce)
 
 An advanced Java logging framework, with custom loggers, multiple output streams, color & style formatting,
 useful utilities for colors and console output and more.
