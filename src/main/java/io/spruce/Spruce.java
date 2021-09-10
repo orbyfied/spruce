@@ -2,7 +2,7 @@ package io.spruce;
 
 import io.spruce.arg.RemoveOutStream;
 import io.spruce.event.Record;
-import io.spruce.pipeline.Handler;
+import io.spruce.pipeline.Part;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.standard.StandardLogger;
 
@@ -46,7 +46,7 @@ public class Spruce {
             if      (arg instanceof OutputStream)    this.cDefaultOutputStreams.add((OutputStream) arg);
             else if (arg instanceof RemoveOutStream) this.cDefaultOutputStreams.remove(((RemoveOutStream) arg).getStream());
 
-            else if (arg instanceof Handler) { cDefaultPipeline.addLast((Handler<Record>) arg); }
+            else if (arg instanceof Part) { cDefaultPipeline.addLast((Part<Record>) arg); }
 
             else if (arg instanceof String) {
                 // get str
@@ -143,9 +143,9 @@ public class Spruce {
         // fix win32 ansi
         if (os.startsWith("windows")) {
             win32 = new Win32();
-            if (win32.load()) {
-                win32.fixVt();
-            }
+//            if (win32.load()) {
+//                win32.fixVt();
+//            }
         }
     }
 
@@ -221,5 +221,7 @@ public class Spruce {
         public native void writeConsoleBufferDirect();
 
     }
+
+    public static native void hello();
 
 }

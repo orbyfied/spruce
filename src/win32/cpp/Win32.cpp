@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include <jni.h>
 #include "Windows.h"
 //#include "io_spruce_Spruce_Win32.h"

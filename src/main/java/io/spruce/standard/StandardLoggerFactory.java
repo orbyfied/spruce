@@ -3,7 +3,7 @@ package io.spruce.standard;
 import io.spruce.LoggerFactory;
 import io.spruce.Spruce;
 import io.spruce.arg.RemoveOutStream;
-import io.spruce.pipeline.Handler;
+import io.spruce.pipeline.Part;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.event.Record;
 
@@ -31,7 +31,7 @@ public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
     }
 
     @Override
-    protected void apply0(StandardLogger logger, List<Handler<Record>> handlerList, String tag, List<Object> other) {
+    protected void apply0(StandardLogger logger, List<Part<Record>> handlerList, String tag, List<Object> other) {
         // process basic parameters
         logger.pipeline(new Pipeline<>(handlerList));
         logger.setTag(tag);

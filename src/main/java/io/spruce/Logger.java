@@ -3,11 +3,12 @@ package io.spruce;
 import io.spruce.event.Record;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.arg.LogLevel;
+import io.spruce.pipeline.PipelineHolder;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class Logger {
+public abstract class Logger implements PipelineHolder<Record> {
 
     /**
      * A tag/ID that the logger can be recognized by.
@@ -84,7 +85,8 @@ public abstract class Logger {
         Record event = new Record(this, s, l, formatted);
 
         // call event and return if cancelled
-        boolean accepted = pipeline.event(event);
+        pipeline.in(event);
+        boolean accepted = event.isAccepted();
         if (!accepted) return;
 
         // retrieve and write message

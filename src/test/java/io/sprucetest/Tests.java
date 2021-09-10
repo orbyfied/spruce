@@ -19,6 +19,8 @@ public class Tests {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
+    public static void activate() { }
+
     public static File getTestFile(String path) {
         File file   = new File(testDir.getAbsolutePath() + "/" + path);
         File parent = file.getParentFile();

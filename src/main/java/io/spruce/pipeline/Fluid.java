@@ -1,6 +1,6 @@
 package io.spruce.pipeline;
 
-public class Event {
+public class Fluid {
     /**
      * Has the event been cancelled?
      */
@@ -16,9 +16,15 @@ public class Event {
 
     /**
      * Returns the cancel status.
-     * @return Value (boolean).
+     * @return Boolean.
      */
     public boolean isCancelled() {
         return cancelled;
     }
+
+    /**
+     * Returns if the event was accepted (it was NOT cancelled)
+     * @return Boolean.
+     */
+    public boolean isAccepted() { return !cancelled; }
 }

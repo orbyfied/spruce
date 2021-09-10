@@ -1,7 +1,7 @@
 package io.spruce;
 
 import io.spruce.meta.Nullable;
-import io.spruce.pipeline.Handler;
+import io.spruce.pipeline.Part;
 import io.spruce.event.Record;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.standard.StandardLoggerFactory;
@@ -31,7 +31,7 @@ public abstract class LoggerFactory<T extends Logger> {
      */
     protected abstract void apply0(
             T logger,
-            List<Handler<Record>> handlerList,
+            List<Part<Record>> handlerList,
             @Nullable String tag,
             List<Object> other
     );
@@ -59,7 +59,7 @@ public abstract class LoggerFactory<T extends Logger> {
         // iterate, process and collect arguments
         String                id       = null;
         String                tag      = null;
-        List<Handler<Record>> handlers = new ArrayList<>();
+        List<Part<Record>> handlers = new ArrayList<>();
         List<Object>          other    = new ArrayList<>();
 
         for (Object arg : args) {
@@ -68,7 +68,7 @@ public abstract class LoggerFactory<T extends Logger> {
                 String s = (String) arg;
                 if      (s.startsWith("id:"))  id = s.substring(3);
                 else if (s.startsWith("tag:")) tag = s.substring(4);
-            } else if (arg instanceof Handler) handlers.add((Handler<Record>) arg);
+            } else if (arg instanceof Part) handlers.add((Part<Record>) arg);
 
             else other.add(arg);
         }

@@ -1,6 +1,10 @@
 package io.sprucetest;
 
 import io.spruce.LoggerFactory;
+import io.spruce.arg.LogLevel;
+import io.spruce.event.Record;
+import io.spruce.pipeline.Pipeline;
+import io.spruce.pipeline.part.Handler;
 import io.spruce.standard.StandardLogger;
 import io.spruce.util.color.ChatColor;
 
@@ -20,8 +24,8 @@ public class BasicLoggerTest {
             StandardLogger logger = LoggerFactory.standard().make("id:sus", new FileOutputStream(testFile));
 
             // add event handler to pipeline
-            logger.pipeline().addLast("appendDate", event -> {
-                event.text().append(ChatColor.YELLOW_FG + " [" + new Date() + "]");
+            logger.pipeline().addLast("appendDate", (Handler<Record>) (pipeline, fluid) -> {
+                fluid.text().append(ChatColor.YELLOW_FG + " [" + new Date() + "]");
             });
 
             // log something
@@ -32,6 +36,8 @@ public class BasicLoggerTest {
 
             // log something else
             logger.severe("hello2");
+
+            logger.pipeline().in(new Record(logger, "sus", LogLevel.INFO, "fuck"));
 
 
             long t2 = System.nanoTime();

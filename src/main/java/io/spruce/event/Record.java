@@ -2,11 +2,9 @@ package io.spruce.event;
 
 import io.spruce.Logger;
 import io.spruce.arg.LogLevel;
-import io.spruce.pipeline.Event;
+import io.spruce.pipeline.Fluid;
 
-import java.util.logging.Formatter;
-
-public class Record extends Event {
+public class Record extends Fluid {
     Logger   logger;
     String   raw;
     LogLevel level;
