@@ -1,6 +1,9 @@
 ![Logo](/project/resources/spruce_logo_full.png)
 # spruce (v1.0-a1)
 ![License](https://img.shields.io/github/license/orbyfied/spruce)
+![Open Issues](https://img.shields.io/github/issues-raw/orbyfied/spruce?color=%23ffc412)
+![Language Count](https://img.shields.io/github/languages/count/orbyfied/spruce)
+![Top Language](https://img.shields.io/github/languages/top/orbyfied/spruce?color=%23c8ff12)
 
 An advanced Java logging framework, with custom loggers, multiple output streams, color & style formatting,
 useful utilities for colors and console output and more.
