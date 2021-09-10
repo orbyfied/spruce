@@ -83,16 +83,16 @@ public class Test {
       // is basically a string of event handlers made
       // to execute events called by the logger once,
       // for example, a message is sent.
-      LoggerPipeline<Record> pipeline = logger.pipeline();
+      Pipeline<Record> pipeline = logger.pipeline();
 
       // add an event handler that handles the specified 'Record' (Log event)
-      pipeline.addLast(event -> {
-         // event.text is a StringBuilder containing the
-         // formatted string. the result of this builder
-         // at the end of the pipeline is whats written
-         // to all of the outputs. this line adds the
-         // current date and time to the end of the line
-         event.text().append(" [" + new Date() + "]");
+      logger.pipeline().addLast("appendDate", (Handler<Record>) (pipeline, event) -> {
+          // event.text is a StringBuilder containing the
+          // formatted string. the result of this builder
+          // at the end of the pipeline is whats written
+          // to all of the outputs. this line adds the
+          // current date and time to the end of the line
+          event.text().append(ChatColor.YELLOW_FG + " [" + new Date() + "]");
       });
 
       //

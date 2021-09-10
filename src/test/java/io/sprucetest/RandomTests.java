@@ -12,7 +12,7 @@ import io.spruce.util.color.ChatColor;
 public class RandomTests {
     public static void main(String[] args) {
 
-        
+
 
     }
 }
