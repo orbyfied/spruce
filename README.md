@@ -1,3 +1,4 @@
+![Logo](/project/resources/spruce_logo_full.png)
 # spruce (v1.0-a1)
 ![License](https://img.shields.io/github/license/orbyfied/spruce)
 
