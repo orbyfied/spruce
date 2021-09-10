@@ -17,9 +17,9 @@ In order to use spruce in your project, you will first have to download or build
 Once you have the JAR, relocate it to a folder that is easliy accessible from your project.
 For example, in the projects root directory;
 ```
-project 
-  - spruce.jar
-  - build.gradle
+root (project folder)
+  └ spruce.jar
+  └ build.gradle
   ...
 ```
 
@@ -30,7 +30,10 @@ Just put this inside of the `dependencies` closure within your build.gradle
 ```groovy
 implementation(files("(maybe relative) path to spruce jar"))
 ```
-For other build tools/platforms, like Maven, just search it on Google.
+For other build tools/platforms, like Maven, you will have to search it on Google.
+These build tools/platforms will be added in future updates to the README, but
+are currently out of scope as I will focus on the README after fixing up the repository
+and finishing the main parts of the project.
 
 ## How to use **`spruce`**
 
