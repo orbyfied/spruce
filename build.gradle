@@ -64,6 +64,8 @@ model {
 
             binaries.all {
 
+                linker.args '--kill-at'
+
                 if (v_arch == "64") {
                     cppCompiler.args '-m64'
                     linker.args '-m64'

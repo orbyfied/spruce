@@ -47,7 +47,7 @@ public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
         }
 
         // add default output streams
-        logger.getOutStreams().addAll(Spruce.getConfigurationInstance().cDefaultOutputStreams);
+        logger.getOutStreams().addAll(Spruce.get().cDefaultOutputStreams);
     }
 
 }

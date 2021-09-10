@@ -81,7 +81,7 @@ public class Spruce {
      * The Spruce configuration instance.
      */
     private static Spruce spruce;
-    public static Spruce getConfigurationInstance() { return spruce; }
+    public static Spruce get() { return spruce; }
 
     private static StandardLogger logger;
 
@@ -150,7 +150,9 @@ public class Spruce {
     }
 
     /** Native class which should 'fix' (enable ansi support for) the Windows console. */
-    static class Win32 {
+    public static class Win32 {
+
+        Win32() {}
 
         public static final String NATIVES_PREFIX  = "spruce-win32";
         public static final String NATIVES_VERSION = "1_0";
@@ -215,6 +217,7 @@ public class Spruce {
         /** @implNote Win32.cpp */
         public native void setConsoleWindowVisible(boolean b);
 
+        /** @implNote Win32.cpp */
         public native void writeConsoleBufferDirect();
 
     }

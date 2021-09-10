@@ -77,7 +77,7 @@ public abstract class LoggerFactory<T extends Logger> {
         T logger = new0(id);
 
         // apply default settings
-        Spruce config = Spruce.getConfigurationInstance();
+        Spruce config = Spruce.get();
 
         Pipeline<Record> d_pipeln = config.cDefaultPipeline;
         if (d_pipeln != null) logger.pipeline(d_pipeln);

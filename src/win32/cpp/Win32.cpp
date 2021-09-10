@@ -13,12 +13,36 @@
 static HANDLE stdout_handle;
 static HANDLE stdin_handle;
 
+static bool isInitialized = false;
+
+jint throwException( JNIEnv *env, char* className, char *message )
+{
+    jclass exClass;
+    exClass = env->FindClass(className);
+
+    if (exClass == NULL) {
+        return throwException( env, className, className );
+    }
+
+    return env->ThrowNew( exClass, message );
+}
+
+
 JNIEXPORT void JNICALL _M_INIT_NTV(JNIEnv* env, jobject _o) {
+    // check if already initialized
+    if (isInitialized) {
+        throwException(env, EXCEPTION_ILLEGAL_STATE, "Spruce/Win32 has already been initialized.");
+        return;
+    }
+
     // get out handle
     stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
     // get in handle
     stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
+
+    // set initialized to true
+    isInitialized = true;
 }
 
 JNIEXPORT void JNICALL _M_FIX_VTPC(JNIEnv* env, jobject _o) {
