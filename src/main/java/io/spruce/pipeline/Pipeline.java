@@ -60,6 +60,12 @@ public class Pipeline<FLUID extends Fluid> {
     }
 
     /**
+     * Checks if the pipeline is empty.
+     * @return Boolean.
+     */
+    public boolean isEmpty() { return handlers.size() == 0; }
+
+    /**
      * Sends an event through the whole pipeline.
      * @param event The event.
      * @return If the event was successfully passed through the pipeline.
@@ -71,8 +77,11 @@ public class Pipeline<FLUID extends Fluid> {
                 if (!holder.eventPassed(event))
                     return false;
 
+            // check if we have handlers
+            if (handlers.size() == 0) return true;
+
             // iterate handlers
-            for (Part<FLUID> h : handlers) h.reach(this, event);
+            for (Part<FLUID> h : handlers) h.accept(this, event);
 
             // return
             return true;

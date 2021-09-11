@@ -12,26 +12,32 @@ public class Splitter<F extends Fluid> implements Part<F> {
     private Pipeline<F>[] pipelines;
     private ThreadPoolExecutor executor;
     private long timeout;
+    private boolean async = true;
 
     /** On a microsecond scale. */
     public static final long DEFAULT_EXECUTOR_TIMEOUT = 1;
 
     public Splitter(Pipeline<F>... pipelines) {
-        this(pipelines, DEFAULT_EXECUTOR_TIMEOUT);
+        this(pipelines, DEFAULT_EXECUTOR_TIMEOUT, false);
     }
 
     public Splitter(long timeout, Pipeline<F>... pipelines) {
-        this(pipelines, timeout);
+        this(pipelines, timeout, false);
     }
 
-    public Splitter(Pipeline<F>[] pipelines, long timeout) {
+    public Splitter(boolean async, long timeout, Pipeline<F>... pipelines) { this(pipelines, timeout, async); }
+
+    public Splitter(boolean async, Pipeline<F>... pipelines) { this(pipelines, DEFAULT_EXECUTOR_TIMEOUT, async); }
+
+    public Splitter(Pipeline<F>[] pipelines, long timeout, boolean async) {
         this.pipelines = pipelines;
         this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(pipelines.length);
         this.timeout = timeout;
+        this.async = async;
     }
 
     @Override
-    public void reach(Pipeline<F> pipeline, F fluid) {
+    public void accept(Pipeline<F> pipeline, F fluid) {
         for (Pipeline<F> pipe : pipelines) {
             executor.execute(() -> {
                 pipe.in(fluid);
@@ -39,7 +45,8 @@ public class Splitter<F extends Fluid> implements Part<F> {
         }
 
         try {
-            executor.awaitTermination(timeout, TimeUnit.MILLISECONDS);
+            if (!async)
+                executor.awaitTermination(timeout, TimeUnit.MILLISECONDS);
         } catch (Exception e) { e.printStackTrace(); }
     }
 

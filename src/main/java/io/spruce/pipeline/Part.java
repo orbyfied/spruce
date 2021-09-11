@@ -6,7 +6,7 @@ public interface Part<FLUID extends Fluid> {
      * @param pipeline The pipeline.
      * @param fluid    The fluid.
      */
-    void reach(Pipeline<FLUID> pipeline, FLUID fluid);
+    void accept(Pipeline<FLUID> pipeline, FLUID fluid);
 
     /**
      * Called when the part is added to a pipeline.

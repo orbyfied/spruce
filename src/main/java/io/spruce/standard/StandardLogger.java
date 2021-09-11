@@ -47,17 +47,18 @@ public class StandardLogger extends Logger {
                     event.text().toString() +
                     event.suffix()          +
                     ChatColor.RESET         + "\n";
-        String s1 = Ansi.strip(s);
         byte[] d  = s.getBytes(StandardCharsets.UTF_8);
-        byte[] d1 = s1.getBytes(StandardCharsets.UTF_8);
+        byte[] d1 = null;
 
         // TODO: add event pipelines per output stream
         // write to all output streams
         for (OutputStream stream : outStreams) {
             try {
-                if (!(stream instanceof PrintStream))
-                     stream.write(d1);
-                else stream.write(d);
+                if (!(stream instanceof PrintStream)) {
+                    if (d1 == null)
+                        d1 = Ansi.strip(s).getBytes(StandardCharsets.UTF_8);
+                    stream.write(d1);
+                } else stream.write(d);
             } catch (IOException e) { e.printStackTrace(); }
         }
     }
