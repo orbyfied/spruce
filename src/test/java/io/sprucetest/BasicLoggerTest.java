@@ -1,11 +1,14 @@
 package io.sprucetest;
 
 import io.spruce.LoggerFactory;
+import io.spruce.Spruce;
 import io.spruce.arg.LogLevel;
+import io.spruce.arg.RemoveCapability;
 import io.spruce.event.Record;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.pipeline.part.Handler;
 import io.spruce.standard.StandardLogger;
+import io.spruce.system.Capability;
 import io.spruce.util.color.ChatColor;
 
 import java.io.File;

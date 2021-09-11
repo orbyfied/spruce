@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class LoggerFactory<T extends Logger> {
 
-    public  static StandardLoggerFactory standard() { return StandardLoggerFactory.pInstance; }
+    public static StandardLoggerFactory standard() { return StandardLoggerFactory.get(); }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -79,7 +79,7 @@ public abstract class LoggerFactory<T extends Logger> {
         // apply default settings
         Spruce config = Spruce.get();
 
-        Pipeline<Record> d_pipeln = config.cDefaultPipeline;
+        Pipeline<Record> d_pipeln = config.defaultPipeline;
         if (d_pipeln != null) logger.pipeline(d_pipeln);
 
         // apply params

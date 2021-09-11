@@ -1,14 +1,19 @@
 package io.spruce;
 
+import io.spruce.arg.RemoveCapability;
 import io.spruce.arg.RemoveOutStream;
 import io.spruce.event.Record;
 import io.spruce.pipeline.Part;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.standard.StandardLogger;
+import io.spruce.standard.StandardLoggerFactory;
+import io.spruce.system.Capabilities;
+import io.spruce.system.Capability;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,8 +29,10 @@ import java.util.List;
 public class Spruce {
 
     // INSTANCE CONFIGURATIONS
-    public final List<OutputStream> cDefaultOutputStreams = new ArrayList<>(Arrays.asList(System.out));
-    public final Pipeline<Record> cDefaultPipeline      = new Pipeline<>();
+    public final List<OutputStream> defaultOutputStreams = new ArrayList<>(Arrays.asList(System.out));
+    public final Pipeline<Record>   defaultPipeline = new Pipeline<>();
+    public final Capabilities       capabilities;
+    public final Capabilities       flatCapabilities;
 
     /**
      * Spruce initializer.
@@ -35,6 +42,9 @@ public class Spruce {
         // set instance
         spruce = this;
 
+        // set defaults
+        capabilities = DEFAULT_CAPABILITIES.flatten();
+
         // TODO: process parameters
         // iterate over parameters
         int l = args.length;
@@ -43,10 +53,14 @@ public class Spruce {
             Object arg = args[i];
 
             // process
-            if      (arg instanceof OutputStream)    this.cDefaultOutputStreams.add((OutputStream) arg);
-            else if (arg instanceof RemoveOutStream) this.cDefaultOutputStreams.remove(((RemoveOutStream) arg).getStream());
+            if      (arg instanceof OutputStream)    this.defaultOutputStreams.add((OutputStream) arg);
+            else if (arg instanceof RemoveOutStream) this.defaultOutputStreams.remove(((RemoveOutStream) arg).getStream());
 
-            else if (arg instanceof Part) { cDefaultPipeline.addLast((Part<Record>) arg); }
+            else if (arg instanceof Part) defaultPipeline.addLast((Part<Record>) arg);
+
+            else if (arg instanceof Capabilities) capabilities.set((Capabilities) arg);
+            else if (arg instanceof Capability) capabilities.add((Capability) arg);
+            else if (arg instanceof RemoveCapability) capabilities.removeBranch(((RemoveCapability)arg).getCapability());
 
             else if (arg instanceof String) {
                 // get str
@@ -67,6 +81,9 @@ public class Spruce {
                 }
             }
         }
+
+        // flatten capabilities
+        flatCapabilities = capabilities.flatten();
 
         // initialize
         initialize();
@@ -107,6 +124,10 @@ public class Spruce {
      */
     public static final String VERSION = "1.0";
 
+    public static final Capabilities DEFAULT_CAPABILITIES = new Capabilities(
+        Capability.ALL
+    );
+
     public static boolean isInitialized() {
         return spruce != null;
     }
@@ -118,34 +139,53 @@ public class Spruce {
      * Initializes Spruce.
      */
     protected static void initialize() {
-        // initialize logger
-        logger = LoggerFactory.standard().make("tag:Spruce", "id:spruce-system");
+        // get capabilities
+        Capabilities capabilities = spruce.flatCapabilities;
 
-        // get os name
-        String os = System.getProperty("os.name").toLowerCase();
+        // check for core capability
+        if (!capabilities.contains(Capability.CORE))
+            return;
 
-        // generate and create data path
-        if (os.startsWith("windows")) {
-            DATA_PATH = System.getenv("APPDATA") + "/" + NAMESPACE;
-        } else { DATA_PATH = "/etc/" + NAMESPACE + ""; }
+        if (capabilities.contains(Capability.LOGGING)) {
+            // initialize standard logger factory
+            try {
+                Field f = StandardLoggerFactory.class.getDeclaredField("instance");
+                f.setAccessible(true);
+                f.set(null, new StandardLoggerFactory());
+            } catch (Exception e) { e.printStackTrace(); }
 
-        NATIVES_PATH = DATA_PATH + "/natives";
+            // initialize logger
+            logger = LoggerFactory.standard().make("tag:Spruce", "id:spruce-system");
+        }
 
-        File f_dp = new File(DATA_PATH);
-        File f_np = new File(NATIVES_PATH);
-        if (!f_dp.exists())
-            if (!f_dp.mkdirs())
-                logger.severe("failed to create data path (\"" + DATA_PATH + "\")");
-        if (!f_np.exists())
-            if (!f_np.mkdirs())
-                logger.severe("failed to create natives path (\"" + NATIVES_PATH + "\")");
+        if (capabilities.contains(Capability.NATIVES)) {
+            // get os name
+            String os = System.getProperty("os.name").toLowerCase();
 
-        // fix win32 ansi
-        if (os.startsWith("windows")) {
-            win32 = new Win32();
-//            if (win32.load()) {
-//                win32.fixVt();
-//            }
+            // generate and create data path
+            if (os.startsWith("windows")) {
+                DATA_PATH = System.getenv("APPDATA") + "/" + NAMESPACE;
+            } else { DATA_PATH = "/etc/" + NAMESPACE + ""; }
+
+            NATIVES_PATH = DATA_PATH + "/natives";
+
+            File f_dp = new File(DATA_PATH);
+            File f_np = new File(NATIVES_PATH);
+            if (!f_dp.exists())
+                if (!f_dp.mkdirs())
+                    logger.severe("failed to create data path (\"" + DATA_PATH + "\")");
+            if (!f_np.exists())
+                if (!f_np.mkdirs())
+                    logger.severe("failed to create natives path (\"" + NATIVES_PATH + "\")");
+
+            // call win32 natives
+            if (os.startsWith("windows")) {
+                win32 = new Win32();
+                if (win32.load()) {
+                    if (capabilities.contains(Capability.VTSEQ))
+                        win32.fixVt();
+                }
+            }
         }
     }
 
@@ -221,7 +261,5 @@ public class Spruce {
         public native void writeConsoleBufferDirect();
 
     }
-
-    public static native void hello();
 
 }

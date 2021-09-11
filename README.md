@@ -6,7 +6,7 @@
 ![Top Language](https://img.shields.io/github/languages/top/orbyfied/spruce?color=%23c8ff12)
 
 An advanced Java logging framework, with custom loggers, multiple output streams, color & style formatting,
-useful utilities for colors and console output and more.
+useful utilities for colors and console output, event pipelines and more.
 
 > README will be updated with useful information once the project gets close to being stable.
 > **This project is under development, the code may be incomplete or even uncompilable.**
@@ -37,7 +37,7 @@ and finishing the main parts of the project.
 
 ## How to use **`spruce`**
 
-Spruce has a many notable features, but I will only show the following in this section:
+Spruce has many notable features, but I will only show the following in this section:
   * Basic logging (with pipeline)
   * Custom loggers
   * Coloured (and formatted) text

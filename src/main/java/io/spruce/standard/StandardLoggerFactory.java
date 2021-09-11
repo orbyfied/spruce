@@ -19,7 +19,8 @@ public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
     }
 
     /** Public instance of this factory. */
-    public static final StandardLoggerFactory pInstance = new StandardLoggerFactory();
+    private static StandardLoggerFactory instance;
+    public static StandardLoggerFactory get() { return instance; }
 
     @Override
     protected StandardLogger new0(String id) {
@@ -47,7 +48,7 @@ public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
         }
 
         // add default output streams
-        logger.getOutStreams().addAll(Spruce.get().cDefaultOutputStreams);
+        logger.getOutStreams().addAll(Spruce.get().defaultOutputStreams);
     }
 
 }
