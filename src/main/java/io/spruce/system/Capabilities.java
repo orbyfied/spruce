@@ -1,10 +1,7 @@
 package io.spruce.system;
 
-import java.net.PortUnreachableException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.function.Predicate;
 
 public class Capabilities extends HashSet<Capability> {
     /** Basic constructor. */

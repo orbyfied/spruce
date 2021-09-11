@@ -1,6 +1,5 @@
 package io.spruce.arg;
 
-import io.spruce.system.Capabilities;
 import io.spruce.system.Capability;
 
 public class RemoveCapability {
