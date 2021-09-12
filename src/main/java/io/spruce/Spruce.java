@@ -1,6 +1,6 @@
 package io.spruce;
 
-import io.spruce.arg.RemoveCapability;
+import io.spruce.arg.DisableCapability;
 import io.spruce.arg.RemoveOutStream;
 import io.spruce.event.Record;
 import io.spruce.pipeline.Part;
@@ -45,6 +45,9 @@ public class Spruce {
         // set defaults
         capabilities = DEFAULT_CAPABILITIES.flatten();
 
+        // capabilities to remove
+        List<Capability> remove = new ArrayList<>();
+
         // TODO: process parameters
         // iterate over parameters
         int l = args.length;
@@ -60,7 +63,7 @@ public class Spruce {
 
             else if (arg instanceof Capabilities) capabilities.set((Capabilities) arg);
             else if (arg instanceof Capability) capabilities.add((Capability) arg);
-            else if (arg instanceof RemoveCapability) capabilities.removeBranch(((RemoveCapability)arg).getCapability());
+            else if (arg instanceof DisableCapability) remove.add(((DisableCapability)arg).getCapability());
 
             else if (arg instanceof String) {
                 // get str
@@ -82,8 +85,17 @@ public class Spruce {
             }
         }
 
+        // remove capabilities
+        for (Capability c : remove) {
+            capabilities.disableBranch(c);
+            capabilities.removeBranch(c);
+        }
+
         // flatten capabilities
         flatCapabilities = capabilities.flatten();
+
+        // enable capabilities
+        flatCapabilities.enableAll();
 
         // initialize
         initialize();

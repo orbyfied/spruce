@@ -1,7 +1,10 @@
 package io.spruce.system;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class Capabilities extends HashSet<Capability> {
     /** Basic constructor. */
@@ -46,7 +49,43 @@ public class Capabilities extends HashSet<Capability> {
     }
 
     /**
-     * Removes the specified capability, and the capabilities it depends on, from the list.
+     * Retrieves and returns the specified branch.
+     * @param capability The branch root.
+     * @return
+     */
+    public Capability[] getBranch(Capability capability) {
+        List<Capability> capabilities = new ArrayList<>();
+        for (Capability c : Capability.values()) {
+            capabilities.addAll(mGetDep(c));
+        }
+        return capabilities.toArray(new Capability[0]);
+    }
+
+    public void disableBranch(Capability capability) {
+        for (Capability c : getBranch(capability))
+            c.disable();
+    }
+
+    public void iterate(Consumer<Capability> consumer) {
+        for (Capability c : this)
+            consumer.accept(c);
+    }
+
+    public void iterateBranch(Capability capability, Consumer<Capability> consumer) {
+        for (Capability c : getBranch(capability))
+            consumer.accept(c);
+    }
+
+    public void enableAll() {
+        iterate(Capability::enable);
+    }
+
+    public void disableAll() {
+        iterate(Capability::disable);
+    }
+
+    /**
+     * Removes the specified capability, and the capabilities that depend on it, from the list.
      * @param capability The capability to remove.
      */
     public void removeBranch(Capability capability) {
@@ -58,6 +97,17 @@ public class Capabilities extends HashSet<Capability> {
             if (mHasDep(c, capability))
                 super.remove(c);
         }
+    }
+
+    private List<Capability> mGetDep(Capability capability) {
+        if (capability.dependencies.length == 0)
+            return new ArrayList<>();
+        List<Capability> capabilities = new ArrayList<>();
+        for (Capability c : capability.dependencies) {
+            if (this.contains(c))
+                capabilities.addAll(mGetDep(c));
+        }
+        return capabilities;
     }
 
     private boolean mHasDep(Capability capability, Capability dep) {
