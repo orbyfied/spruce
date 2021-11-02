@@ -1,9 +1,19 @@
 package io.sprucetest;
 
+import io.spruce.logging.LoggerFactory;
+import io.spruce.Spruce;
+import io.spruce.arg.DisableCapability;
+import io.spruce.standard.StandardLogger;
+import io.spruce.system.Capability;
 import io.spruce.util.color.ChatColor;
 
 public class ChatFormatTest {
     public static void main(String[] args) {
+        new Spruce(new DisableCapability(Capability.NATIVES));
+
+        StandardLogger logger = LoggerFactory.standard().make();
+        logger.info(ChatColor.AQUA_FG + "hi");
+
         // print something in red and underlined
         System.out.println(ChatColor.RED_FG + "" + ChatColor.UNDERLINE + "hi"); // 'AnsiAttr.c(AnsiAttr...)' concatenates multiple ANSI codes.
 

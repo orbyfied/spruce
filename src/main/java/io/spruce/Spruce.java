@@ -1,8 +1,10 @@
 package io.spruce;
 
 import io.spruce.arg.DisableCapability;
-import io.spruce.arg.RemoveOutStream;
+import io.spruce.arg.RemoveOutWorker;
 import io.spruce.event.Record;
+import io.spruce.logging.LoggerFactory;
+import io.spruce.logging.io.OutputWorker;
 import io.spruce.pipeline.Part;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.standard.StandardLogger;
@@ -12,7 +14,6 @@ import io.spruce.system.Capability;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.List;
 public class Spruce {
 
     // INSTANCE CONFIGURATIONS
-    public final List<OutputStream> defaultOutputStreams = new ArrayList<>(Arrays.asList(System.out));
+    public final List<OutputWorker> defaultOutputStreams = new ArrayList<>(Arrays.asList(OutputWorker.SYSOUT));
     public final Pipeline<Record>   defaultPipeline = new Pipeline<>();
     public final Capabilities       capabilities;
     public final Capabilities       flatCapabilities;
@@ -56,8 +57,8 @@ public class Spruce {
             Object arg = args[i];
 
             // process
-            if      (arg instanceof OutputStream)    this.defaultOutputStreams.add((OutputStream) arg);
-            else if (arg instanceof RemoveOutStream) this.defaultOutputStreams.remove(((RemoveOutStream) arg).getStream());
+            if      (arg instanceof OutputWorker)    this.defaultOutputStreams.add((OutputWorker) arg);
+            else if (arg instanceof RemoveOutWorker) this.defaultOutputStreams.remove(((RemoveOutWorker) arg).getWorker());
 
             else if (arg instanceof Part) defaultPipeline.addLast((Part<Record>) arg);
 

@@ -1,6 +1,8 @@
 package io.sprucetest;
 
 import io.spruce.Spruce;
+import io.spruce.arg.DisableCapability;
+import io.spruce.system.Capability;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +12,7 @@ public class Tests {
 
     static {
         // initialize spruce
-        new Spruce();
+        new Spruce(new DisableCapability(Capability.NATIVES));
 
         // create test directory
         try {

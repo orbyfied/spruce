@@ -71,6 +71,9 @@ model {
 //                    linker.args '-m64'
                 }
 
+                linker.args '-shared'
+                linker.args '-flinker-output=dyn'
+
                 cppCompiler.args "-I ${buildDir}/generated/sources/headers/java/main/"
                 if (targetPlatform.operatingSystem.macOsX) {
                     cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
@@ -84,11 +87,13 @@ model {
                 } else if (targetPlatform.operatingSystem.windows) {
                     cppCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
                     cppCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include/win32"
-//                    linker.args "Shlwapi.lib", "Advapi32.lib"
+                    linker.args "Shlwapi.lib", "Advapi32.lib"
                 } else if (targetPlatform.operatingSystem.freeBSD) {
                     cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
                     cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/freebsd"
                 }
+
+                System.out.println(linker.args)
             }
         }
     }

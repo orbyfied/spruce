@@ -1,8 +1,9 @@
 package io.spruce.standard;
 
-import io.spruce.Logger;
-import io.spruce.arg.LogLevel;
+import io.spruce.logging.Logger;
+import io.spruce.arg.LogType;
 import io.spruce.event.Record;
+import io.spruce.logging.io.OutputWorker;
 import io.spruce.util.color.Ansi;
 import io.spruce.util.color.ChatColor;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class StandardLogger extends Logger {
 
-    private List<OutputStream> outStreams;
+    private List<OutputWorker> outStreams;
     private boolean            shouldPrintTag = true;
 
     /*
@@ -26,7 +27,7 @@ public class StandardLogger extends Logger {
         this(id, new ArrayList<>());
     }
 
-    public StandardLogger(String id, List<OutputStream> streams) {
+    public StandardLogger(String id, List<OutputWorker> streams) {
         super(id);
         this.outStreams = streams;
     }
@@ -35,36 +36,18 @@ public class StandardLogger extends Logger {
     /* Basic output stream list modifiers. */
     /*                                     */
 
-    public List<OutputStream> getOutStreams() { return outStreams; }
-    public void setOutStreams(List<OutputStream> outStreams) { this.outStreams = outStreams; }
-    public void addOutStream(OutputStream stream) { this.outStreams.add(stream); }
-    public void removeOutStream(OutputStream stream) { this.outStreams.remove(stream); }
+    public List<OutputWorker> getOutStreams() { return outStreams; }
+    public void setOutStreams(List<OutputWorker> outStreams) { this.outStreams = outStreams; }
+    public void addOutStream(OutputWorker stream) { this.outStreams.add(stream); }
+    public void removeOutStream(OutputWorker stream) { this.outStreams.remove(stream); }
 
     @Override
-    protected void write0(Record event) {
-        // create final string and convert to UTF-8 bytes
-        String s  = event.prefix()          +
-                    event.text().toString() +
-                    event.suffix()          +
-                    ChatColor.RESET         + "\n";
-        byte[] d  = s.getBytes(StandardCharsets.UTF_8);
-        byte[] d1 = null;
-
-        // TODO: add event pipelines per output stream
-        // write to all output streams
-        for (OutputStream stream : outStreams) {
-            try {
-                if (!(stream instanceof PrintStream)) {
-                    if (d1 == null)
-                        d1 = Ansi.strip(s).getBytes(StandardCharsets.UTF_8);
-                    stream.write(d1);
-                } else stream.write(d);
-            } catch (IOException e) { e.printStackTrace(); }
-        }
+    protected List<OutputWorker> write0(Record record) {
+        return outStreams;
     }
 
     @Override
-    protected String format0(String text, LogLevel level, Object... extra) {
+    protected String format0(String text, LogType level, Object... extra) {
         // create string builder options
         StringBuilder builder = new StringBuilder();
 
@@ -73,23 +56,23 @@ public class StandardLogger extends Logger {
                 .append(ChatColor.RESET).append(")").append(" ");
 
         // append log level
-        builder.append(ChatColor.BOLD + "[");
+        builder.append(ChatColor.BOLD).append("[");
 
         switch (level.getId()) {
             case "std.severe":
-                builder.append(ChatColor.RED_FG + "SEVERE");
+                builder.append(ChatColor.RED_FG).append("SEVERE");
                 break;
             case "std.info":
-                builder.append(ChatColor.AQUA_FG + "INFO");
+                builder.append(ChatColor.BLUE_FG).append("INFO");
                 break;
             case "std.warn":
-                builder.append(ChatColor.YELLOW_FG + "WARN");
+                builder.append(ChatColor.YELLOW_FG).append("WARN");
                 break;
             default:
-                builder.append(new ChatColor(160, 160, 160) + level.getTag().toUpperCase());
+                builder.append(new ChatColor(160, 160, 160)).append(level.getTag().toUpperCase());
         }
 
-        builder.append(ChatColor.RESET).append(ChatColor.BOLD + "] ").append(ChatColor.RESET);
+        builder.append(ChatColor.RESET).append(ChatColor.BOLD).append("] ").append(ChatColor.RESET);
 
         // append text
         builder.append(text);

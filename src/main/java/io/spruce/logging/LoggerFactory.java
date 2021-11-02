@@ -1,5 +1,6 @@
-package io.spruce;
+package io.spruce.logging;
 
+import io.spruce.Spruce;
 import io.spruce.meta.Nullable;
 import io.spruce.pipeline.Part;
 import io.spruce.event.Record;

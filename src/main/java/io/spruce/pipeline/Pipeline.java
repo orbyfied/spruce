@@ -1,6 +1,5 @@
 package io.spruce.pipeline;
 
-import io.spruce.Logger;
 import io.spruce.meta.Nullable;
 
 import java.util.ArrayList;
@@ -72,13 +71,13 @@ public class Pipeline<FLUID extends Fluid> {
      */
     public boolean in(FLUID event) {
         try {
+            // check if we have handlers
+            if (handlers.size() == 0) return true;
+
             // check if the call is accepted
             if (isBound())
                 if (!holder.eventPassed(event))
                     return false;
-
-            // check if we have handlers
-            if (handlers.size() == 0) return true;
 
             // iterate handlers
             for (Part<FLUID> h : handlers) h.accept(this, event);

@@ -1,10 +1,15 @@
 package io.sprucetest;
 
-import io.spruce.Logger;
-import io.spruce.arg.LogLevel;
+import io.spruce.arg.OutputInfo;
+import io.spruce.logging.Logger;
+import io.spruce.arg.LogType;
 import io.spruce.event.Record;
+import io.spruce.logging.io.OutputWorker;
 import io.spruce.standard.StandardLogger;
 import io.spruce.util.color.ChatColor;
+
+import java.util.List;
+import java.util.function.BiFunction;
 
 public class CustomLoggerTest {
     public static void main(String[] args) {
@@ -32,12 +37,12 @@ class MyLogger1 extends StandardLogger { // StandardLogger is the 'prefab' logge
     }
 
     @Override
-    public void write0(Record event) {
+    public List<OutputWorker> write0(Record event) {
         // write " [HELLO]" to the end of the final text
         event.text().append(" [HELLO]");
 
         // call StandardLogger's write method to keep its functionality
-        super.write0(event);
+        return super.write0(event);
     }
 }
 
@@ -55,14 +60,23 @@ class MyLogger2 extends Logger {
     //                                                         the raw text with the corresponding properties
     //                                                         before it is sent to the LogEvent and pipeline.
 
+    private static final OutputWorker outputWorker = OutputWorker.create(
+            OutputInfo.builder()
+                    .withStream(System.out)
+                    .hasAnsi(true)
+                    .withProcessFunction((record, s) -> ChatColor.RED_FG + s)
+                    .build()
+    );
+
+    private static final List<OutputWorker> owlist = List.of(outputWorker);
+
     @Override
-    protected void write0(Record event) {
-        // we will just print the text to the console, but colored in red
-        System.out.println(ChatColor.RED_FG + event.text().toString());
+    protected List<OutputWorker> write0(Record event) {
+        return owlist;
     }
 
     @Override
-    protected String format0(String text, LogLevel lvl, Object... args) {
+    protected String format0(String text, LogType lvl, Object... args) {
         // for this example we will just return the logging level with the text
         return "[" + lvl.getTag() + "] " + text;
     }

@@ -1,13 +1,13 @@
 package io.spruce.standard;
 
-import io.spruce.LoggerFactory;
+import io.spruce.logging.LoggerFactory;
 import io.spruce.Spruce;
-import io.spruce.arg.RemoveOutStream;
+import io.spruce.arg.RemoveOutWorker;
+import io.spruce.logging.io.OutputWorker;
 import io.spruce.pipeline.Part;
 import io.spruce.pipeline.Pipeline;
 import io.spruce.event.Record;
 
-import java.io.OutputStream;
 import java.util.List;
 
 public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
@@ -40,10 +40,10 @@ public class StandardLoggerFactory extends LoggerFactory<StandardLogger> {
         // process 'other' parameters
         for (Object arg : other) {
 
-            if (arg instanceof OutputStream)
-                logger.addOutStream((OutputStream) arg);
-            else if (arg instanceof RemoveOutStream)
-                logger.removeOutStream(((RemoveOutStream) arg).getStream());
+            if (arg instanceof OutputWorker)
+                logger.addOutStream((OutputWorker) arg);
+            else if (arg instanceof RemoveOutWorker)
+                logger.removeOutStream(((RemoveOutWorker) arg).getWorker());
 
         }
 

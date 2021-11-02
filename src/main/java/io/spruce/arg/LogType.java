@@ -6,23 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 // TODO: thinking of renaming this to "LogType"
-public class LogLevel {
+public class LogType {
 
     /**
      * All LogLevels mapped by ID.
      */
-    private static Map<String, LogLevel> allById = new HashMap<>();
+    private static Map<String, LogType> allById = new HashMap<>();
 
-    public static LogLevel getById(String id) { return allById.get(id); }
+    public static LogType getById(String id) { return allById.get(id); }
 
-    public static final LogLevel
-        SEVERE = new LogLevel("std.severe", "Severe", HasFormatting.YES); // error or severe warning
-    public static final LogLevel
-        WARN = new LogLevel("std.warn", "Warn", HasFormatting.YES); // warning
-    public static final LogLevel
-        INFO = new LogLevel("std.info", "Info", HasFormatting.YES); // information
-    public static final LogLevel
-        RAW = new LogLevel("std.raw", "Raw", HasFormatting.NO); // raw message
+    public static final LogType
+        SEVERE = new LogType("std.severe", "Severe", HasFormatting.YES); // error or severe warning
+    public static final LogType
+        WARN = new LogType("std.warn", "Warn", HasFormatting.YES); // warning
+    public static final LogType
+        INFO = new LogType("std.info", "Info", HasFormatting.YES); // information
+    public static final LogType
+        RAW = new LogType("std.raw", "Raw", HasFormatting.NO); // raw message
     /**
      * A nicely formatted tag string.
      */
@@ -41,7 +41,7 @@ public class LogLevel {
     List<Object> data;
 
     /** Default constructor. */
-    public LogLevel(String id, String tag, Object... data) {
+    public LogType(String id, String tag, Object... data) {
         this.id   = id;
         this.tag  = tag;
         this.data = Arrays.asList(data);
