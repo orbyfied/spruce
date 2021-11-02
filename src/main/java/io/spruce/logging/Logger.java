@@ -110,8 +110,7 @@ public abstract class Logger implements PipelineHolder<Record> {
 
         // call event and return if cancelled
         prePipeline.in(event);
-        boolean accepted = event.isAccepted();
-        if (!accepted) return;
+        if (event.isCancelled()) return;
 
         // schedule
         worker.queue(event);
@@ -129,9 +128,9 @@ public abstract class Logger implements PipelineHolder<Record> {
     public void warn   (Object s, Object... args) { this.log(s, LogType.WARN,   args); }
     public void severe (Object s, Object... args) { this.log(s, LogType.SEVERE, args); }
 
-    public void info   (Supplier<String> s, Object... args) { this.log(s.get(), LogType.INFO,   args); }
-    public void warn   (Supplier<String> s, Object... args) { this.log(s.get(), LogType.WARN,   args); }
-    public void severe (Supplier<String> s, Object... args) { this.log(s.get(), LogType.SEVERE, args); }
+    public void info   (Supplier<?> s, Object... args) { this.log(s.get(), LogType.INFO,   args); }
+    public void warn   (Supplier<?> s, Object... args) { this.log(s.get(), LogType.WARN,   args); }
+    public void severe (Supplier<?> s, Object... args) { this.log(s.get(), LogType.SEVERE, args); }
 
     public void info(Function<Logger, String> f, Object... args) {
         this.log(f.apply(this), LogType.INFO, args); }

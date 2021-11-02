@@ -12,7 +12,6 @@ public class Record extends LoggerEvent {
     LogType  level;
 
     Object[] other;
-    Map<String, Object> carry;
 
     StringBuilder prefixBuilder;
     StringBuilder finalTextBuilder;
@@ -25,7 +24,6 @@ public class Record extends LoggerEvent {
         this.level  = level;
 
         this.other = other;
-        this.carry = new HashMap<>();
 
         this.finalTextBuilder = new StringBuilder(currentFinalText);
         this.prefixBuilder    = new StringBuilder();
@@ -95,28 +93,5 @@ public class Record extends LoggerEvent {
      */
     public void setSuffix(String suffix) {
         this.suffixBuilder = new StringBuilder(suffix);
-    }
-
-    /*
-     * Carrier system. Allows you to carry values throughout
-     * the event chain that the log request goes through.
-     */
-
-    public <T> void carry(final String key, final T value) {
-        carry.put(key, value);
-    }
-
-    public <T> T carried(final String key) {
-        return (T) carry.get(key);
-    }
-
-    public <T> T uncarry(final String key) {
-        return (T) carry.remove(key);
-    }
-
-    public void uncarry(final Object o) {
-        carry.forEach((key, value) -> {
-            if (value == o) carry.remove(key);
-        });
     }
 }

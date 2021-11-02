@@ -1,8 +1,10 @@
 package io.sprucetest;
 
+import io.spruce.logging.Logger;
 import io.spruce.logging.LoggerFactory;
 import io.spruce.arg.LogType;
 import io.spruce.event.Record;
+import io.spruce.pipeline.Pipeline;
 import io.spruce.pipeline.part.Handler;
 import io.spruce.standard.StandardLogger;
 import io.spruce.util.color.ChatColor;
@@ -22,8 +24,22 @@ public class BasicLoggerTest {
 
             long t1 = System.nanoTime();
 
-            for (int i = 0; i < 1000; i++)
-                logger.info(i);
+            //////////////////
+
+            logger.prePipeline().addLast("getDate", (Handler<Record>) (pipeline, event) -> {
+                event.carry("date", new Date());
+            });
+
+            logger.pipeline().addLast("appendDate", (Handler<Record>) (pipeline, event) -> {
+                event.prefix()
+                        .append("[")
+                        .append(event.carried("date").toString())
+                        .append("] ");
+            });
+
+            logger.info("hello");
+
+            //////////////////
 
             long t2 = System.nanoTime();
             long t  = t2 - t1;
