@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.8.0'
+    }
+}
+
 plugins {
     id 'java'
     id 'cpp'
@@ -6,11 +16,15 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'cpp'
 
-group 'io.orbyfied.spruce'
-version '1.0'
+group 'io.github.orbyfied'
+version '2.0.1'
 
 sourceCompatibility = 13
 targetCompatibility = 13
+
+jar {
+    enabled true
+}
 
 sourceSets {
     main {
@@ -56,7 +70,7 @@ model {
             targetPlatform "x64"
 
             String v_baseName = "spruce-win32"
-            String v_version  = "1_0"
+            String v_version  = "1_3"
             String v_arch     = "64"
 
             String v_name = v_baseName + "-v" + v_version + "_" + v_arch

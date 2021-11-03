@@ -1,16 +1,17 @@
 package io.sprucetest;
 
-import io.spruce.logging.Logger;
-import io.spruce.logging.LoggerFactory;
-import io.spruce.arg.LogType;
-import io.spruce.event.Record;
-import io.spruce.pipeline.Pipeline;
-import io.spruce.pipeline.part.Handler;
-import io.spruce.standard.StandardLogger;
-import io.spruce.util.color.ChatColor;
+import io.orbyfied.spruce.Spruce;
+import io.orbyfied.spruce.arg.OutputInfo;
+import io.orbyfied.spruce.logging.LoggerFactory;
+import io.orbyfied.spruce.event.Record;
+import io.orbyfied.spruce.logging.io.OutputWorker;
+import io.orbyfied.spruce.pipeline.part.Handler;
+import io.orbyfied.spruce.standard.StandardLogger;
+import io.orbyfied.spruce.util.color.ChatColor;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Date;
 
 public class BasicLoggerTest {
@@ -19,6 +20,8 @@ public class BasicLoggerTest {
 
     public static void main(String[] args) {
         try {
+            System.out.println(Spruce.VERSION);
+
             // create logger
             StandardLogger logger = LoggerFactory.standard().make("id:sus", new FileOutputStream(testFile));
 
@@ -32,9 +35,11 @@ public class BasicLoggerTest {
 
             logger.pipeline().addLast("appendDate", (Handler<Record>) (pipeline, event) -> {
                 event.prefix()
+                        .append(ChatColor.YELLOW_FG)
                         .append("[")
                         .append(event.carried("date").toString())
-                        .append("] ");
+                        .append("] ")
+                        .append(ChatColor.RESET);
             });
 
             logger.info("hello");

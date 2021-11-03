@@ -1,11 +1,11 @@
 package io.sprucetest;
 
-import io.spruce.logging.LoggerFactory;
-import io.spruce.Spruce;
-import io.spruce.arg.DisableCapability;
-import io.spruce.standard.StandardLogger;
-import io.spruce.system.Capability;
-import io.spruce.util.color.ChatColor;
+import io.orbyfied.spruce.logging.LoggerFactory;
+import io.orbyfied.spruce.Spruce;
+import io.orbyfied.spruce.arg.DisableCapability;
+import io.orbyfied.spruce.standard.StandardLogger;
+import io.orbyfied.spruce.system.Capability;
+import io.orbyfied.spruce.util.color.ChatColor;
 
 public class ChatFormatTest {
     public static void main(String[] args) {

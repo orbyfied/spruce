@@ -1,8 +1,8 @@
 package io.sprucetest;
 
-import io.spruce.Spruce;
-import io.spruce.arg.DisableCapability;
-import io.spruce.system.Capability;
+import io.orbyfied.spruce.Spruce;
+import io.orbyfied.spruce.arg.DisableCapability;
+import io.orbyfied.spruce.system.Capability;
 
 public class RandomTests {
     public static void main(String[] args) {

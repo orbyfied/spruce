@@ -1,15 +1,14 @@
 package io.sprucetest;
 
-import io.spruce.arg.OutputInfo;
-import io.spruce.logging.Logger;
-import io.spruce.arg.LogType;
-import io.spruce.event.Record;
-import io.spruce.logging.io.OutputWorker;
-import io.spruce.standard.StandardLogger;
-import io.spruce.util.color.ChatColor;
+import io.orbyfied.spruce.arg.OutputInfo;
+import io.orbyfied.spruce.logging.Logger;
+import io.orbyfied.spruce.arg.LogType;
+import io.orbyfied.spruce.event.Record;
+import io.orbyfied.spruce.logging.io.OutputWorker;
+import io.orbyfied.spruce.standard.StandardLogger;
+import io.orbyfied.spruce.util.color.ChatColor;
 
 import java.util.List;
-import java.util.function.BiFunction;
 
 public class CustomLoggerTest {
     public static void main(String[] args) {
