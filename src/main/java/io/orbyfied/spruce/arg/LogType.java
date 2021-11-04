@@ -29,28 +29,29 @@ public class LogType {
         DEBUG = new LogType("std.debug", "Debug", HasFormatting.YES); // debug
     public static final LogType
         RAW = new LogType("std.raw", "Raw", HasFormatting.NO); // raw message
+
     /**
      * A nicely formatted tag string.
      */
-    String tag;
+    final String tag;
 
     /**
      * Internal ID for possible translation and theme
      * functionality.
      */
-    String id;
+    final String id;
 
     /**
      * Extra information/data usable for custom and
      * default logger implementations.
      */
-    List<Object> data;
+    final List<Object> data;
 
     /**
      * Optional formatter. Gets called by the logger
      * worker asynchronously. Optional.
      */
-    Formatter formatter;
+    final Formatter formatter;
 
     /**
      * Default constructor.
@@ -94,11 +95,6 @@ public class LogType {
     public void destroy() {
         // remove from registry
         allById.remove(this.id);
-
-        // 'destroy' object data
-        this.id   = null;
-        this.tag  = null;
-        this.data = null;
     }
 
     /**

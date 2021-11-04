@@ -3,7 +3,7 @@
 #include <jni.h>
 #include "Windows.h"
 
-//#include "io_spruce_Spruce_Win32.h"
+#include "io_orbyfied_spruce_Spruce_Win32.h"
 
 #include "const.hpp"
 

@@ -6,7 +6,7 @@ import io.orbyfied.spruce.arg.LogType;
 import io.orbyfied.spruce.event.Record;
 import io.orbyfied.spruce.logging.io.OutputWorker;
 import io.orbyfied.spruce.standard.StandardLogger;
-import io.orbyfied.spruce.util.color.ChatColor;
+import io.orbyfied.spruce.util.color.TextFormat;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ class MyLogger2 extends Logger {
             OutputInfo.builder()
                     .withStream(System.out)
                     .hasAnsi(true)
-                    .withProcessFunction((record, s) -> ChatColor.RED_FG + s)
+                    .withProcessFunction((record, s) -> TextFormat.RED_FG + s)
                     .build()
     );
 

@@ -1,6 +1,6 @@
 package io.orbyfied.spruce.standard;
 
-import io.orbyfied.spruce.util.color.ChatColor;
+import io.orbyfied.spruce.util.color.TextFormat;
 import io.orbyfied.spruce.logging.Logger;
 import io.orbyfied.spruce.arg.LogType;
 import io.orbyfied.spruce.event.Record;
@@ -47,27 +47,27 @@ public class StandardLogger extends Logger {
         StringBuilder builder = new StringBuilder();
 
         // append tag (if needed)
-        if (shouldPrintTag && tag != null) builder.append("(").append(ChatColor.BOLD).append(tag)
-                .append(ChatColor.RESET).append(")").append(" ");
+        if (shouldPrintTag && tag != null) builder.append("(").append(TextFormat.BOLD).append(tag)
+                .append(TextFormat.RESET).append(")").append(" ");
 
         // append log level
-        builder.append(ChatColor.BOLD).append("[");
+        builder.append(TextFormat.BOLD).append("[");
 
         switch (level.getId()) {
             case "std.severe":
-                builder.append(ChatColor.RED_FG).append("SEVERE");
+                builder.append(TextFormat.RED_FG).append("SEVERE");
                 break;
             case "std.info":
-                builder.append(ChatColor.BLUE_FG).append("INFO");
+                builder.append(TextFormat.BLUE_FG).append("INFO");
                 break;
             case "std.warn":
-                builder.append(ChatColor.YELLOW_FG).append("WARN");
+                builder.append(TextFormat.YELLOW_FG).append("WARN");
                 break;
             default:
-                builder.append(new ChatColor(160, 160, 160)).append(level.getTag().toUpperCase());
+                builder.append(new TextFormat(160, 160, 160)).append(level.getTag().toUpperCase());
         }
 
-        builder.append(ChatColor.RESET).append(ChatColor.BOLD).append("] ").append(ChatColor.RESET);
+        builder.append(TextFormat.RESET).append(TextFormat.BOLD).append("] ").append(TextFormat.RESET);
 
         // append text
         builder.append(text);

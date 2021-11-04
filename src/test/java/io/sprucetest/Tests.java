@@ -12,7 +12,7 @@ public class Tests {
 
     static {
         // initialize spruce
-        new Spruce(new DisableCapability(Capability.NATIVES));
+        new Spruce();
 
         // create test directory
         try {

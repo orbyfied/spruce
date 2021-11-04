@@ -4,57 +4,46 @@ buildscript {
     }
 
     dependencies {
+        // required to publish to maven central
         classpath 'com.vanniktech:gradle-maven-publish-plugin:0.8.0'
     }
 }
 
+// plugins
 plugins {
-    id 'java'
-    id 'cpp'
+    id 'java' // for building java
+    id 'cpp'  // for building natives
 }
 
+// apply plugins
 apply plugin: 'java'
 apply plugin: 'cpp'
 
+// project info
 group 'io.github.orbyfied'
 version '2.0.1'
 
 sourceCompatibility = 13
 targetCompatibility = 13
 
+// JAR task config
 jar {
+    // enable the task
     enabled true
+
+    // make sure that the DLLs are built
+    dependsOn 'win32X64SharedLibrary', 'win32X86SharedLibrary'
+
+    /* include resources */
+
+    // win32 DLLs (x64/x86)
+    from("build/libs/win32/shared/x64") { include("*.dll") duplicatesStrategy DuplicatesStrategy.EXCLUDE }
+    from("build/libs/win32/shared/x86") { include("*.dll") duplicatesStrategy DuplicatesStrategy.EXCLUDE }
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs "src/main/resources"
-            include "/build/libs/**.dll"
-
-            // include natives
-            String libfp = "${buildDir}/libs/"
-            File   libf  = new File(libfp);
-            if (!libf.exists())
-                libf.mkdir();
-
-            FileFilter isDir = f -> f.isDirectory();
-            FileFilter isDll = f -> f.getAbsolutePath().endsWith(".dll");
-
-            for (File file : libf.listFiles(isDir)) { // iterate "libs" to find all libraries
-                // enter "shared"
-                File filen = new File(file.getAbsolutePath() + "/shared/");
-                for (File file1 : filen.listFiles(isDir)) { // iterate over "shared" to find all platforms
-                    for (File file2 : file1.listFiles(isDll)) { // get all dlls
-                        include(file2.getAbsolutePath())
-                    }
-                }
-            }
-        }
-    }
-}
-
+// natives
 model {
+    // supported architectures
     platforms {
         x86 {
             architecture "x86"
@@ -65,10 +54,13 @@ model {
     }
 
     components {
+        // Win32 library (Spruce.Win32)
         win32(NativeLibrarySpec) {
+            // target platforms
             targetPlatform "x86"
             targetPlatform "x64"
 
+            // DLL info
             String v_baseName = "spruce-win32"
             String v_version  = "1_3"
             String v_arch     = "64"
@@ -76,38 +68,32 @@ model {
             String v_name = v_baseName + "-v" + v_version + "_" + v_arch
             setBaseName(v_name)
 
+            // describe binaries (DLL)
             binaries.all {
 
-//                linker.args '--kill-at'
+                // linker params
+                linker.args '--kill-at'
 
                 if (v_arch == "64") {
                     cppCompiler.args '-m64'
-//                    linker.args '-m64'
+                    linker.args '-m64'
                 }
 
                 linker.args '-shared'
                 linker.args '-flinker-output=dyn'
 
-                cppCompiler.args "-I ${buildDir}/generated/sources/headers/java/main/"
-                if (targetPlatform.operatingSystem.macOsX) {
-                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
-                    cppCompiler.args '-mmacosx-version-min=10.4'
-//                    linker.args '-mmacosx-version-min=10.4'
-                } else if (targetPlatform.operatingSystem.linux) {
-                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
-                    cppCompiler.args '-D_FILE_OFFSET_BITS=64'
-                } else if (targetPlatform.operatingSystem.windows) {
+                // include JNI headers
+                cppCompiler.args "-I${buildDir}/generated/sources/headers/java/main/"
+
+                // check if target is Windows
+                if (targetPlatform.operatingSystem.windows) {
+                    // add JNI includes
                     cppCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
                     cppCompiler.args "-I${org.gradle.internal.jvm.Jvm.current().javaHome}/include/win32"
-                    linker.args "Shlwapi.lib", "Advapi32.lib"
-                } else if (targetPlatform.operatingSystem.freeBSD) {
-                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                    cppCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/freebsd"
-                }
 
-                System.out.println(linker.args)
+                    // add more linker parameters
+                    linker.args "Shlwapi.lib", "Advapi32.lib"
+                }
             }
         }
     }

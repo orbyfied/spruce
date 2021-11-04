@@ -1,17 +1,14 @@
 package io.sprucetest;
 
 import io.orbyfied.spruce.Spruce;
-import io.orbyfied.spruce.arg.OutputInfo;
 import io.orbyfied.spruce.logging.LoggerFactory;
 import io.orbyfied.spruce.event.Record;
-import io.orbyfied.spruce.logging.io.OutputWorker;
 import io.orbyfied.spruce.pipeline.part.Handler;
 import io.orbyfied.spruce.standard.StandardLogger;
-import io.orbyfied.spruce.util.color.ChatColor;
+import io.orbyfied.spruce.util.color.TextFormat;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.Date;
 
 public class BasicLoggerTest {
@@ -35,11 +32,11 @@ public class BasicLoggerTest {
 
             logger.pipeline().addLast("appendDate", (Handler<Record>) (pipeline, event) -> {
                 event.prefix()
-                        .append(ChatColor.YELLOW_FG)
+                        .append(TextFormat.YELLOW_FG)
                         .append("[")
                         .append(event.carried("date").toString())
                         .append("] ")
-                        .append(ChatColor.RESET);
+                        .append(TextFormat.RESET);
             });
 
             logger.info("hello");

@@ -2,7 +2,7 @@ package io.orbyfied.spruce.logging.io;
 
 import io.orbyfied.spruce.pipeline.Pipeline;
 import io.orbyfied.spruce.util.color.Ansi;
-import io.orbyfied.spruce.util.color.ChatColor;
+import io.orbyfied.spruce.util.color.TextFormat;
 import io.orbyfied.spruce.arg.OutputInfo;
 import io.orbyfied.spruce.event.Record;
 
@@ -119,7 +119,7 @@ public class OutputWorker {
                 if (record == null) continue;
 
                 // create final text
-                String finalText = record.finalText() + ChatColor.RESET + "\n";
+                String finalText = record.finalText() + TextFormat.RESET + "\n";
                 if (info.getProcessFunction() != null) finalText = info.getProcessFunction().apply(record, finalText);
 
                 // write to output stream
