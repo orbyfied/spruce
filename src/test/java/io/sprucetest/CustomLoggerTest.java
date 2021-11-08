@@ -1,8 +1,8 @@
 package io.sprucetest;
 
-import io.orbyfied.spruce.arg.OutputInfo;
+import io.orbyfied.spruce.logging.io.Output;
 import io.orbyfied.spruce.logging.Logger;
-import io.orbyfied.spruce.arg.LogType;
+import io.orbyfied.spruce.logging.LogType;
 import io.orbyfied.spruce.event.Record;
 import io.orbyfied.spruce.logging.io.OutputWorker;
 import io.orbyfied.spruce.standard.StandardLogger;
@@ -60,7 +60,7 @@ class MyLogger2 extends Logger {
     //                                                         before it is sent to the LogEvent and pipeline.
 
     private static final OutputWorker outputWorker = OutputWorker.create(
-            OutputInfo.builder()
+            Output.builder()
                     .withStream(System.out)
                     .hasAnsi(true)
                     .withProcessFunction((record, s) -> TextFormat.RED_FG + s)

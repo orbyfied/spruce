@@ -2,7 +2,7 @@ package io.orbyfied.spruce.standard;
 
 import io.orbyfied.spruce.util.color.TextFormat;
 import io.orbyfied.spruce.logging.Logger;
-import io.orbyfied.spruce.arg.LogType;
+import io.orbyfied.spruce.logging.LogType;
 import io.orbyfied.spruce.event.Record;
 import io.orbyfied.spruce.logging.io.OutputWorker;
 
@@ -46,13 +46,13 @@ public class StandardLogger extends Logger {
         // create string builder options
         StringBuilder builder = new StringBuilder();
 
+        builder.append("[");
+
         // append tag (if needed)
-        if (shouldPrintTag && tag != null) builder.append("(").append(TextFormat.BOLD).append(tag)
-                .append(TextFormat.RESET).append(")").append(" ");
+        if (shouldPrintTag && tag != null) builder.append(tag).append("/");
 
         // append log level
-        builder.append(TextFormat.BOLD).append("[");
-
+        builder.append(TextFormat.BOLD);
         switch (level.getId()) {
             case "std.severe":
                 builder.append(TextFormat.RED_FG).append("SEVERE");
@@ -67,7 +67,7 @@ public class StandardLogger extends Logger {
                 builder.append(new TextFormat(160, 160, 160)).append(level.getTag().toUpperCase());
         }
 
-        builder.append(TextFormat.RESET).append(TextFormat.BOLD).append("] ").append(TextFormat.RESET);
+        builder.append(TextFormat.RESET).append("] ");
 
         // append text
         builder.append(text);

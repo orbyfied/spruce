@@ -1,6 +1,5 @@
 package io.orbyfied.spruce.logging;
 
-import io.orbyfied.spruce.arg.LogType;
 import io.orbyfied.spruce.event.Record;
 import io.orbyfied.spruce.logging.io.OutputWorker;
 import io.orbyfied.spruce.pipeline.Pipeline;

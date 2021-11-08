@@ -3,7 +3,6 @@ package io.orbyfied.spruce.logging.io;
 import io.orbyfied.spruce.pipeline.Pipeline;
 import io.orbyfied.spruce.util.color.Ansi;
 import io.orbyfied.spruce.util.color.TextFormat;
-import io.orbyfied.spruce.arg.OutputInfo;
 import io.orbyfied.spruce.event.Record;
 
 import java.io.OutputStream;
@@ -14,25 +13,25 @@ import java.util.function.BiFunction;
 
 public class OutputWorker {
 
-    public static final OutputWorker SYSOUT = create(OutputInfo.SYSOUT);
+    public static final OutputWorker SYSOUT = create(Output.SYSOUT);
 
     public static OutputWorker create(OutputStream stream, boolean hasAnsi) {
-        return new OutputWorker(OutputInfo.builder().withStream(stream).hasAnsi(hasAnsi).build());
+        return new OutputWorker(Output.builder().withStream(stream).hasAnsi(hasAnsi).build());
     }
 
-    public static OutputWorker create(OutputInfo info, Pipeline<Record> pipeline, BiFunction<Record, String, String> processor) {
+    public static OutputWorker create(Output info, Pipeline<Record> pipeline, BiFunction<Record, String, String> processor) {
         return new OutputWorker(info.toBuilder().withPipeline(pipeline).withProcessFunction(processor).build());
     }
 
-    public static OutputWorker create(OutputInfo info, Pipeline<Record> pipeline) {
+    public static OutputWorker create(Output info, Pipeline<Record> pipeline) {
         return new OutputWorker(info.toBuilder().withPipeline(pipeline).build());
     }
 
-    public static OutputWorker create(OutputInfo info, BiFunction<Record, String, String> processor) {
+    public static OutputWorker create(Output info, BiFunction<Record, String, String> processor) {
         return new OutputWorker(info.toBuilder().withProcessFunction(processor).build());
     }
 
-    public static OutputWorker create(OutputInfo info) {
+    public static OutputWorker create(Output info) {
         return new OutputWorker(info);
     }
 
@@ -41,7 +40,7 @@ public class OutputWorker {
     /**
      * The logger that this worker is attached to.
      */
-    protected OutputInfo info;
+    protected Output info;
 
     /**
      * The worker thread.
@@ -63,7 +62,7 @@ public class OutputWorker {
      * @param info The information about the output
      *             it will be writing to.
      */
-    public OutputWorker(OutputInfo info) {
+    public OutputWorker(Output info) {
         this.info = info;
         this.thread = new WorkerThread();
         this.working = new AtomicBoolean(false);
@@ -73,7 +72,7 @@ public class OutputWorker {
      * Gets the output info this worker uses.
      * @return The info object.
      */
-    public OutputInfo getInfo() {
+    public Output getInfo() {
         return info;
     }
 
@@ -97,6 +96,9 @@ public class OutputWorker {
      * Stops the worker thread.
      */
     public void stop() {
+        try {
+            thread.stop();
+        } catch (Exception e) { e.printStackTrace(); }
         working.set(false);
     }
 
@@ -106,7 +108,7 @@ public class OutputWorker {
      */
     public void queue(Record record) {
         queue.add(record);
-        if (!working.get()) start();
+        if (!thread.isAlive()) start();
     }
 
     /** The class for the worker thread. */
@@ -118,14 +120,16 @@ public class OutputWorker {
                 Record record = queue.poll();
                 if (record == null) continue;
 
-                // create final text
-                String finalText = record.finalText() + TextFormat.RESET + "\n";
-                if (info.getProcessFunction() != null) finalText = info.getProcessFunction().apply(record, finalText);
+                try {
+                    // create final text
+                    String finalText = record.finalText() + TextFormat.RESET + "\n";
+                    if (info.getProcessFunction() != null) finalText = info.getProcessFunction().apply(record, finalText);
 
-                // write to output stream
-                if (!info.hasAnsi())
-                    finalText = Ansi.strip(finalText);
-                info.write(finalText);
+                    // write to output stream
+                    if (!info.hasAnsi())
+                        finalText = Ansi.strip(finalText);
+                    info.write(finalText);
+                } catch (Exception e) { e.printStackTrace(); }
             }
 
             working.set(false);

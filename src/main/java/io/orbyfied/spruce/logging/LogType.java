@@ -1,7 +1,6 @@
-package io.orbyfied.spruce.arg;
+package io.orbyfied.spruce.logging;
 
 import io.orbyfied.spruce.event.Record;
-import io.orbyfied.spruce.internal.Run;
 import io.orbyfied.spruce.logging.process.Formatter;
 
 import java.util.Arrays;

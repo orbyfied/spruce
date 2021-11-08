@@ -80,7 +80,7 @@ public class LoggerWorker {
      */
     public void queue(Record record) {
         queue.add(record);
-        if (!working.get()) start();
+        if (!thread.isAlive()) start();
     }
 
     /** The class for the worker thread. */
@@ -92,22 +92,24 @@ public class LoggerWorker {
                 Record record = queue.poll();
                 if (record == null) continue;
 
-                // format request
-                record.getLevel().format(record);
-                String tf = logger.format0(
-                        record.text().toString(),
-                        record.getLevel(),
-                        record.getOther()
-                );
-                record.setText(tf);
+                try {
+                    // format request
+                    record.getLevel().format(record);
+                    String tf = logger.format0(
+                            record.text().toString(),
+                            record.getLevel(),
+                            record.getOther()
+                    );
+                    record.setText(tf);
 
-                // pass request through pipeline
-                logger.pipeline().in(record);
-                if (record.isCancelled()) continue;
+                    // pass request through pipeline
+                    logger.pipeline().in(record);
+                    if (record.isCancelled()) continue;
 
-                // queue for output to all output workers
-                for (OutputWorker worker : logger.write0(record))
-                    worker.queue(record);
+                    // queue for output to all output workers
+                    for (OutputWorker worker : logger.write0(record))
+                        worker.queue(record);
+                } catch (Exception e) { }
             }
 
             working.set(false);

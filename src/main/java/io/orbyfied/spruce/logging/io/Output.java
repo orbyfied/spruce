@@ -1,4 +1,4 @@
-package io.orbyfied.spruce.arg;
+package io.orbyfied.spruce.logging.io;
 
 import io.orbyfied.spruce.pipeline.Pipeline;
 import io.orbyfied.spruce.event.Record;
@@ -11,21 +11,21 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.function.BiFunction;
 
-public class OutputInfo implements Cloneable, PipelineHolder<Record> {
+public class Output implements Cloneable, PipelineHolder<Record> {
 
     public static Builder builder() { return new Builder(); }
 
-    public static final OutputInfo SYSOUT = new Builder()
+    public static final Output SYSOUT = new Builder()
             .hasAnsi(true)
             .withStream(System.out)
             .build();
 
-    public static final OutputInfo VOIDING = new Builder()
+    public static final Output VOIDING = new Builder()
             .hasAnsi(true)
             .withStream(new VoidingOutputStream())
             .build();
 
-    public static final OutputInfo fromFile(File file) {
+    public static final Output fromFile(File file) {
         try {
             return new Builder()
                     .hasAnsi(false)
@@ -42,10 +42,10 @@ public class OutputInfo implements Cloneable, PipelineHolder<Record> {
 
     BiFunction<Record, String, String> processFunction;
 
-    OutputInfo(OutputStream stream,
-               boolean hasAnsi,
-               BiFunction<Record, String, String> processFunction,
-               Pipeline<Record> pipeline) {
+    Output(OutputStream stream,
+           boolean hasAnsi,
+           BiFunction<Record, String, String> processFunction,
+           Pipeline<Record> pipeline) {
         this.stream   = stream;
         this.hasAnsi  = hasAnsi;
         this.pipeline = pipeline != null ? pipeline : new Pipeline<>(this);
@@ -71,9 +71,9 @@ public class OutputInfo implements Cloneable, PipelineHolder<Record> {
         return processFunction;
     }
 
-    public OutputInfo clone() {
+    public Output clone() {
         try {
-            return (OutputInfo) super.clone();
+            return (Output) super.clone();
         } catch (Exception e) { e.printStackTrace(); }
         return null;
     }
@@ -147,8 +147,8 @@ public class OutputInfo implements Cloneable, PipelineHolder<Record> {
             return this;
         }
 
-        public OutputInfo build() {
-            return new OutputInfo(
+        public Output build() {
+            return new Output(
                 stream, hasAnsi, processFunction, pipeline
             );
         }

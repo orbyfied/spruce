@@ -1,6 +1,6 @@
 package io.orbyfied.spruce.event;
 
-import io.orbyfied.spruce.arg.LogType;
+import io.orbyfied.spruce.logging.LogType;
 import io.orbyfied.spruce.logging.Logger;
 
 import java.util.Map;
