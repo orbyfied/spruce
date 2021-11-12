@@ -11,8 +11,14 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 
+/**
+ * Asynchronous processor/writer class.
+ */
 public class OutputWorker {
 
+    /**
+     * <code>System.out</code> output worker.
+     */
     public static final OutputWorker SYSOUT = create(Output.SYSOUT);
 
     public static OutputWorker create(OutputStream stream, boolean hasAnsi) {
