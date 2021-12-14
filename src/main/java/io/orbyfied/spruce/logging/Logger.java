@@ -101,11 +101,8 @@ public abstract class Logger implements PipelineHolder<Record> {
      *              logger may accept.
      */
     public void log(Object o, LogType l, Object... extra) {
-        // tostring object
-        String s = (o != null) ? o.toString() : "null";
-
         // construct event
-        Record event = new Record(this, s, l, s, extra);
+        Record event = new Record(this, o, "", l, "", extra);
 
         // call event and return if cancelled
         prePipeline.in(event);

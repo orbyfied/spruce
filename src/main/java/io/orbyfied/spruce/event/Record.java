@@ -10,17 +10,26 @@ public class Record extends LoggerEvent {
     LogType level;
 
     Object[] other;
+    Object   obj;
 
     StringBuilder prefixBuilder;
     StringBuilder finalTextBuilder;
     StringBuilder suffixBuilder;
 
-    public Record(Logger logger, String raw, LogType level, String currentFinalText, Object[] other) {
+    boolean locked = false;
+
+    public Record(Logger logger,
+                  Object obj,
+                  String raw,
+                  LogType level,
+                  String currentFinalText,
+                  Object[] other) {
         super(logger);
 
         this.raw    = raw;
         this.level  = level;
 
+        this.obj   = obj;
         this.other = other;
 
         this.finalTextBuilder = new StringBuilder(currentFinalText);
@@ -32,13 +41,13 @@ public class Record extends LoggerEvent {
     /* Basic getters. */
     /*                */
 
-    public LogType  getLevel() { return level; }
-    public String   getRaw()   { return raw;   }
-    public Object[] getOther() { return other; }
+    public LogType  getLevel()  { return level; }
+    public String   getRaw()    { return raw;   }
+    public Object[] getOther()  { return other; }
+    public Object   getObject() { return obj;   }
 
-    public Map<String, Object> getCarry() {
-        return carry;
-    }
+    public boolean isLocked()           { return locked;   }
+    public void    setLocked(boolean b) { this.locked = b; }
 
     /**
      * Returns the StringBuilder for the final used/printed text.
@@ -67,6 +76,11 @@ public class Record extends LoggerEvent {
         return prefixBuilder.toString()
                 + finalTextBuilder
                 + suffixBuilder.toString();
+    }
+
+    @Deprecated
+    public void setRaw(String raw) {
+        this.raw = raw;
     }
 
     /**

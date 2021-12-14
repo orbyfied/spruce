@@ -41,6 +41,8 @@ public class Fluid {
      * the event chain that the log request goes through.
      */
 
+    public <T> Map<String, T> carried() { return (Map<String, T>)carry; }
+
     public <T> void carry(final String key, final T value) {
         carry.put(key, value);
     }

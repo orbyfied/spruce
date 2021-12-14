@@ -3,6 +3,7 @@ package io.sprucetest;
 import io.orbyfied.spruce.Spruce;
 import io.orbyfied.spruce.arg.DisableCapability;
 import io.orbyfied.spruce.logging.LoggerFactory;
+import io.orbyfied.spruce.logging.type.Debug;
 import io.orbyfied.spruce.standard.StandardLogger;
 import io.orbyfied.spruce.system.Capability;
 
@@ -15,7 +16,6 @@ public class RandomTests {
         //////////////////////////////////
 
         StandardLogger logger = LoggerFactory.standard().make("tag:Logger");
-
         for (int i = 0; i < 1000; i++)
             logger.info(i);
 

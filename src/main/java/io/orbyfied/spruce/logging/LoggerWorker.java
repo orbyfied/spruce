@@ -23,6 +23,11 @@ public class LoggerWorker {
     protected Thread thread;
 
     /**
+     * The communication for thread activation.
+     */
+    private final Object lock = new Object();
+
+    /**
      * If the worker thread is currently running.
      */
     protected AtomicBoolean working;
@@ -40,6 +45,7 @@ public class LoggerWorker {
         this.logger = logger;
         this.thread = new WorkerThread();
         this.working = new AtomicBoolean(false);
+        this.start();
     }
 
     /**
@@ -71,6 +77,7 @@ public class LoggerWorker {
      */
     public void stop() {
         working.set(false);
+        synchronized (lock) { lock.notifyAll(); } // <- make sure that the thread wont hibernate forever
     }
 
     /**
@@ -80,19 +87,43 @@ public class LoggerWorker {
      */
     public void queue(Record record) {
         queue.add(record);
-        if (!thread.isAlive()) start();
+        synchronized (lock) { lock.notifyAll(); }
     }
 
     /** The class for the worker thread. */
     class WorkerThread extends Thread {
+
+        /** Internal. */
+        public WorkerThread() {
+            setDaemon(false);
+        }
+
+        /** Internal. */
+        void waitFor() {
+            try { synchronized (lock) { lock.wait(); } } catch (Exception e) { e.printStackTrace(); }
+        }
+
         @Override
         public void run() {
-            while (working.get() && !queue.isEmpty()) {
+            while (working.get()) {
+                // hibernate if nothing is queued
+                if (queue.isEmpty())
+                    waitFor();
+                if (!working.get()) break;
+
                 // poll and check request
                 Record record = queue.poll();
                 if (record == null) continue;
 
                 try {
+                    // set raw text
+                    if (!record.isLocked()) { // check if it has been locked first
+                        Object o = record.getObject();
+                        String t = o != null ? o.toString() : null;
+                        record.setRaw(t);
+                        record.setText(t);
+                    }
+
                     // format request
                     record.getLevel().format(record);
                     String tf = logger.format0(
@@ -115,5 +146,6 @@ public class LoggerWorker {
             working.set(false);
 
         }
+
     }
 }

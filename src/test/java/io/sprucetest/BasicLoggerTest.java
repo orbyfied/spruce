@@ -3,6 +3,8 @@ package io.sprucetest;
 import io.orbyfied.spruce.Spruce;
 import io.orbyfied.spruce.logging.LoggerFactory;
 import io.orbyfied.spruce.event.Record;
+import io.orbyfied.spruce.logging.io.OutputWorker;
+import io.orbyfied.spruce.logging.type.Debug;
 import io.orbyfied.spruce.pipeline.part.Handler;
 import io.orbyfied.spruce.standard.StandardLogger;
 import io.orbyfied.spruce.util.color.TextFormat;
@@ -17,10 +19,11 @@ public class BasicLoggerTest {
 
     public static void main(String[] args) {
         try {
-            System.out.println(Spruce.VERSION);
-
             // create logger
-            StandardLogger logger = LoggerFactory.standard().make("id:sus", new FileOutputStream(testFile));
+            StandardLogger logger = LoggerFactory.standard().make(
+                    "id:impostor", "tag:SussyImpostor",
+                    OutputWorker.create(new FileOutputStream(testFile), false)
+            );
 
             long t1 = System.nanoTime();
 
@@ -32,14 +35,15 @@ public class BasicLoggerTest {
 
             logger.pipeline().addLast("appendDate", (Handler<Record>) (pipeline, event) -> {
                 event.prefix()
-                        .append(TextFormat.YELLOW_FG)
+                        .append(TextFormat.DARK_YELLOW_FG)
                         .append("[")
                         .append(event.carried("date").toString())
                         .append("] ")
                         .append(TextFormat.RESET);
             });
 
-            logger.info("hello");
+            for (int i = 0; i < 1000000; i++)
+                logger.info(i);
 
             //////////////////
 

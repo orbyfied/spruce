@@ -79,6 +79,9 @@ public class Pipeline<FLUID extends Fluid> {
                 if (!holder.eventPassed(event))
                     return false;
 
+            // set cancelled to false
+            event.setCancelled(false);
+
             // iterate handlers
             for (Part<FLUID> h : handlers) h.accept(this, event);
 

@@ -54,6 +54,11 @@ public class OutputWorker {
     protected Thread thread;
 
     /**
+     * The communication for thread activation.
+     */
+    private final Object lock = new Object();
+
+    /**
      * If the worker thread is currently running.
      */
     protected AtomicBoolean working;
@@ -72,6 +77,7 @@ public class OutputWorker {
         this.info = info;
         this.thread = new WorkerThread();
         this.working = new AtomicBoolean(false);
+        this.start();
     }
 
     /**
@@ -102,10 +108,8 @@ public class OutputWorker {
      * Stops the worker thread.
      */
     public void stop() {
-        try {
-            thread.stop();
-        } catch (Exception e) { e.printStackTrace(); }
         working.set(false);
+        synchronized (lock) { lock.notifyAll(); } // <- make sure that the thread wont hibernate forever
     }
 
     /**
@@ -114,14 +118,30 @@ public class OutputWorker {
      */
     public void queue(Record record) {
         queue.add(record);
-        if (!thread.isAlive()) start();
+        synchronized (lock) { lock.notifyAll(); }
     }
 
     /** The class for the worker thread. */
     class WorkerThread extends Thread {
+
+        /** Internal. */
+        public WorkerThread() {
+            setDaemon(false);
+        }
+
+        /** Internal. */
+        void waitFor() {
+            try { synchronized (lock) { lock.wait(); } } catch (Exception e) { e.printStackTrace(); }
+        }
+
         @Override
         public void run() {
-            while (working.get() && !queue.isEmpty()) {
+            while (working.get()) {
+                // hibernate if nothing is queued
+                if (queue.isEmpty())
+                    waitFor();
+                if (!working.get()) break;
+
                 // poll and check request
                 Record record = queue.poll();
                 if (record == null) continue;
@@ -140,5 +160,6 @@ public class OutputWorker {
 
             working.set(false);
         }
+
     }
 }

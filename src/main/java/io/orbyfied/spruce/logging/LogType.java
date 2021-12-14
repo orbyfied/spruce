@@ -2,6 +2,7 @@ package io.orbyfied.spruce.logging;
 
 import io.orbyfied.spruce.event.Record;
 import io.orbyfied.spruce.logging.process.Formatter;
+import io.orbyfied.spruce.logging.type.Debug;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,9 +26,17 @@ public class LogType {
     public static final LogType
         INFO = new LogType("std.info", "Info", HasFormatting.YES); // information
     public static final LogType
-        DEBUG = new LogType("std.debug", "Debug", HasFormatting.YES); // debug
-    public static final LogType
         RAW = new LogType("std.raw", "Raw", HasFormatting.NO); // raw message
+
+    public static final LogType
+            DEBUG = new LogType("std.debug", "Debug", record -> {
+                if (record.getObject() instanceof Debug.Struct)
+                    record.text().append(record.getObject());
+
+                for (Object o : record.getOther())
+                    if (o instanceof Debug.Struct)
+                        record.text().append(o);
+            }, HasFormatting.YES); // debug
 
     /**
      * A nicely formatted tag string.

@@ -99,6 +99,7 @@ public class Spruce {
 
         /* Disable native branch because it doesn't work yet. */
         capabilities.disableBranch(Capability.NATIVES);
+        capabilities.removeBranch(Capability.NATIVES);
 
         // flatten capabilities
         flatCapabilities = capabilities.flatten();

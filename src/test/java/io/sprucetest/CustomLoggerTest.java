@@ -33,6 +33,7 @@ public class CustomLoggerTest {
 class MyLogger1 extends StandardLogger { // StandardLogger is the 'prefab' logger class shipped with spruce
     public MyLogger1(String id) {
         super(id); // requires super constructor
+        this.addOutStream(OutputWorker.create(Output.SYSOUT)); // add System.out output
     }
 
     @Override
@@ -63,7 +64,7 @@ class MyLogger2 extends Logger {
             Output.builder()
                     .withStream(System.out)
                     .hasAnsi(true)
-                    .withProcessFunction((record, s) -> TextFormat.RED_FG + s)
+                    .withProcessFunction((record, s) -> TextFormat.DARK_RED_FG + s)
                     .build()
     );
 

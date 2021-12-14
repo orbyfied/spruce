@@ -49,19 +49,23 @@ public class StandardLogger extends Logger {
         builder.append("[");
 
         // append tag (if needed)
-        if (shouldPrintTag && tag != null) builder.append(tag).append("/");
+        if (shouldPrintTag && tag != null) builder
+                .append(TextFormat.DARK_GRAY_FG)
+                .append(tag)
+                .append(TextFormat.RESET)
+                .append("/");
 
         // append log level
         builder.append(TextFormat.BOLD);
         switch (level.getId()) {
             case "std.severe":
-                builder.append(TextFormat.RED_FG).append("SEVERE");
+                builder.append(TextFormat.DARK_RED_FG).append("SEVERE");
                 break;
             case "std.info":
-                builder.append(TextFormat.BLUE_FG).append("INFO");
+                builder.append(TextFormat.DARK_BLUE_FG).append("INFO");
                 break;
             case "std.warn":
-                builder.append(TextFormat.YELLOW_FG).append("WARN");
+                builder.append(TextFormat.DARK_YELLOW_FG).append("WARN");
                 break;
             default:
                 builder.append(new TextFormat(160, 160, 160)).append(level.getTag().toUpperCase());
